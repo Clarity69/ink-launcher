@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /** Widget kustom disimpan sebagai file JSON di penyimpanan internal (filesDir/custom_widgets). */
@@ -16,8 +17,15 @@ class CustomWidgetStore(context: Context, private val scope: CoroutineScope) {
     private val dir = File(context.filesDir, "custom_widgets").apply { mkdirs() }
     private val mutex = Mutex()
 
-    private val _widgets = MutableStateFlow(loadAll())
+    private val _widgets = MutableStateFlow<List<CustomWidget>>(emptyList())
     val widgets: StateFlow<List<CustomWidget>> = _widgets
+
+    init {
+        scope.launch {
+            val list = withContext(Dispatchers.IO) { loadAll() }
+            _widgets.value = (list + _widgets.value).distinctBy { it.id }.sortedBy { it.name.lowercase() }
+        }
+    }
 
     private fun loadAll(): List<CustomWidget> =
         (dir.listFiles { f -> f.extension == "json" } ?: emptyArray())

@@ -30,6 +30,7 @@ import com.taro.inklauncher.data.ThemeMode
 import com.taro.inklauncher.ui.common.LocalIconProcessor
 import com.taro.inklauncher.ui.common.LocalPrefs
 import com.taro.inklauncher.ui.drawer.AppDrawer
+import com.taro.inklauncher.ui.drawer.rememberDrawerController
 import com.taro.inklauncher.ui.home.HomeScreen
 import com.taro.inklauncher.ui.settings.SettingsScreen
 import com.taro.inklauncher.ui.theme.InkMotion
@@ -69,7 +70,7 @@ fun LauncherRoot(vm: LauncherViewModel) {
     ) {
         InkTheme(dark = dark) {
             val ink = LocalInk.current
-            val drawerOpen by vm.drawerOpen.collectAsStateWithLifecycle()
+            val drawer = rememberDrawerController(vm)
             val screens by vm.screens.collectAsStateWithLifecycle()
             val canGoBack by vm.canGoBack.collectAsStateWithLifecycle()
 
@@ -80,8 +81,8 @@ fun LauncherRoot(vm: LauncherViewModel) {
                     .fillMaxSize()
                     .then(if (prefs.showWallpaper) Modifier else Modifier.background(ink.bg)),
             ) {
-                HomeScreen(vm)
-                AppDrawer(vm, drawerOpen)
+                HomeScreen(vm, drawer)
+                AppDrawer(vm, drawer)
                 AnimatedContent(
                     targetState = screens.lastOrNull(),
                     transitionSpec = { fadeIn(tween(InkMotion.SHORT)) togetherWith fadeOut(tween(InkMotion.SHORT)) },

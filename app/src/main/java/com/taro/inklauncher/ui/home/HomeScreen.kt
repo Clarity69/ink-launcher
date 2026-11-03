@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -65,6 +66,7 @@ import com.taro.inklauncher.ui.common.InkMenu
 import com.taro.inklauncher.ui.common.LocalPrefs
 import com.taro.inklauncher.ui.common.MenuAction
 import com.taro.inklauncher.ui.common.MsIcon
+import com.taro.inklauncher.ui.drawer.DrawerController
 import com.taro.inklauncher.ui.glance.AtAGlance
 import com.taro.inklauncher.ui.search.PixelSearchBar
 import com.taro.inklauncher.ui.theme.InkMotion
@@ -78,7 +80,7 @@ fun safeInsets(): WindowInsets = WindowInsets.systemBars
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(vm: LauncherViewModel) {
+fun HomeScreen(vm: LauncherViewModel, drawer: DrawerController) {
     val prefs = LocalPrefs.current
     val ink = LocalInk.current
     val context = LocalContext.current
@@ -105,8 +107,9 @@ fun HomeScreen(vm: LauncherViewModel) {
     }
 
     val swipeThreshold = with(density) { 56.dp.toPx() }
-    val onSwipeUp by rememberUpdatedState { if (prefs.gestureSwipeUp) vm.openDrawer() }
+    val swipeUpEnabled by rememberUpdatedState(prefs.gestureSwipeUp)
     val onSwipeDown by rememberUpdatedState { if (prefs.gestureSwipeDown) StatusBarHelper.expandNotifications(context) }
+    val blocked by rememberUpdatedState(moving != null || resizing != null)
 
     Box(
         Modifier
@@ -117,19 +120,38 @@ fun HomeScreen(vm: LauncherViewModel) {
             Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(safeInsets())
-                // Gestur launcher hanya di area tengah (sudah dikurangi inset gestur sistem).
-                .pointerInput(Unit) {
+                // Swipe atas: laci mengikuti jari. Swipe bawah: panel notifikasi.
+                .pointerInput(drawer) {
                     var total = 0f
+                    var draggingDrawer = false
+                    val tracker = VelocityTracker()
                     detectVerticalDragGestures(
-                        onDragStart = { total = 0f },
+                        onDragStart = {
+                            total = 0f
+                            draggingDrawer = false
+                            tracker.resetTracking()
+                        },
                         onDragEnd = {
-                            if (total < -swipeThreshold) onSwipeUp() else if (total > swipeThreshold) onSwipeDown()
+                            if (draggingDrawer) {
+                                drawer.settle(tracker.calculateVelocity().y)
+                            } else if (total > swipeThreshold) {
+                                onSwipeDown()
+                            }
                             total = 0f
                         },
-                        onDragCancel = { total = 0f },
+                        onDragCancel = {
+                            if (draggingDrawer) drawer.settle(0f)
+                            total = 0f
+                        },
                         onVerticalDrag = { change, amount ->
-                            total += amount
                             change.consume()
+                            tracker.addPosition(change.uptimeMillis, change.position)
+                            total += amount
+                            if (!draggingDrawer && total < 0f && swipeUpEnabled && !blocked) {
+                                draggingDrawer = true
+                                vm.homeMenu.value = null
+                            }
+                            if (draggingDrawer) drawer.dragBy(amount)
                         },
                     )
                 },

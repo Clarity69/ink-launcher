@@ -1,11 +1,5 @@
 package com.taro.inklauncher.ui.drawer
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,11 +38,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -56,6 +52,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -73,71 +70,95 @@ import com.taro.inklauncher.ui.theme.LocalInk
 import kotlinx.coroutines.delay
 import java.text.Normalizer
 
+/**
+ * Laci aplikasi. Selalu tersusun dan digeser lewat graphicsLayer sesuai [DrawerController.progress],
+ * sehingga mengikuti jari tanpa recompose per frame dan langsung siap saat dibuka.
+ */
 @Composable
-fun AppDrawer(vm: LauncherViewModel, visible: Boolean) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically(tween(InkMotion.MEDIUM)) { it / 5 } + fadeIn(tween(InkMotion.SHORT)),
-        exit = slideOutVertically(tween(InkMotion.SHORT)) { it / 5 } + fadeOut(tween(InkMotion.SHORT)),
+fun AppDrawer(vm: LauncherViewModel, drawer: DrawerController) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .onSizeChanged { drawer.heightPx = it.height.toFloat().coerceAtLeast(1f) }
+            .graphicsLayer {
+                val p = drawer.progress.value
+                translationY = (1f - p) * size.height
+                alpha = if (p <= 0.001f) 0f else 1f
+            },
     ) {
-        DrawerContent(vm)
+        DrawerContent(vm, drawer)
     }
 }
 
+private val diacritics = Regex("\\p{Mn}+")
+
 private fun normalize(s: String): String =
-    Normalizer.normalize(s.lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{Mn}+"), "")
+    Normalizer.normalize(s.lowercase(), Normalizer.Form.NFD).replace(diacritics, "")
 
 @Composable
-private fun DrawerContent(vm: LauncherViewModel) {
+private fun DrawerContent(vm: LauncherViewModel, drawer: DrawerController) {
     val ink = LocalInk.current
     val prefs = LocalPrefs.current
     val apps by vm.drawerApps.collectAsStateWithLifecycle()
+    val open by vm.drawerOpen.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val density = LocalDensity.current
-    val closeThreshold = with(density) { 96.dp.toPx() }
 
-    val filtered = remember(apps, query) {
+    // Label yang dinormalisasi dihitung sekali per daftar aplikasi.
+    val normalized = remember(apps) { apps.map { it to normalize(it.label) } }
+    val filtered = remember(normalized, query) {
         val q = normalize(query.trim())
         if (q.isEmpty()) {
             apps
         } else {
-            apps.filter { normalize(it.label).contains(q) }
-                .sortedBy { if (normalize(it.label).startsWith(q)) 0 else 1 }
+            normalized.filter { it.second.contains(q) }
+                .sortedBy { if (it.second.startsWith(q)) 0 else 1 }
+                .map { it.first }
         }
     }
 
-    LaunchedEffect(Unit) {
-        if (prefs.drawerAutoKeyboard) {
-            delay(InkMotion.MEDIUM.toLong())
-            runCatching { focus.requestFocus() }
-            keyboard?.show()
+    LaunchedEffect(open) {
+        if (open) {
+            if (prefs.drawerAutoKeyboard) {
+                delay(InkMotion.MEDIUM.toLong())
+                runCatching { focus.requestFocus() }
+                keyboard?.show()
+            }
+        } else {
+            focusManager.clearFocus()
+            keyboard?.hide()
+            query = ""
         }
     }
 
-    val close: () -> Unit = {
-        focusManager.clearFocus()
-        keyboard?.hide()
-        vm.closeDrawer()
-    }
-
-    // Tarik ke bawah saat daftar di posisi paling atas = tutup laci.
-    val closeConnection = remember {
+    // Grid: tarik ke bawah di posisi paling atas = laci ikut turun; lepas = menempel.
+    val connection = remember(drawer) {
         object : NestedScrollConnection {
-            var pull = 0f
-            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                if (available.y > 0f) {
-                    pull += available.y
-                    if (pull > closeThreshold) {
-                        pull = 0f
-                        close()
-                    }
-                } else if (consumed.y != 0f) {
-                    pull = 0f
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                // Laci sedang setengah tertutup dan jari naik: buka lagi dulu sebelum grid menggulir.
+                if (available.y < 0f && drawer.progress.value < 1f) {
+                    drawer.dragBy(available.y)
+                    return Offset(0f, available.y)
                 }
                 return Offset.Zero
+            }
+
+            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                if (available.y > 0f) {
+                    drawer.dragBy(available.y)
+                    return Offset(0f, available.y)
+                }
+                return Offset.Zero
+            }
+
+            override suspend fun onPreFling(available: Velocity): Velocity {
+                if (drawer.progress.value < 1f) {
+                    drawer.settle(available.y)
+                    return available
+                }
+                return Velocity.Zero
             }
         }
     }
@@ -153,14 +174,16 @@ private fun DrawerContent(vm: LauncherViewModel) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .pointerInput(Unit) {
-                    var total = 0f
+                .pointerInput(drawer) {
+                    val tracker = VelocityTracker()
                     detectVerticalDragGestures(
-                        onDragStart = { total = 0f },
-                        onDragEnd = { if (total > closeThreshold / 2) close() },
+                        onDragStart = { tracker.resetTracking() },
+                        onDragEnd = { drawer.settle(tracker.calculateVelocity().y) },
+                        onDragCancel = { drawer.settle(0f) },
                         onVerticalDrag = { change, amount ->
-                            total += amount
+                            tracker.addPosition(change.uptimeMillis, change.position)
                             change.consume()
+                            drawer.dragBy(amount)
                         },
                     )
                 }
@@ -210,16 +233,17 @@ private fun DrawerContent(vm: LauncherViewModel) {
             }
         }
 
+        val showLabels = query.isNotBlank()
         LazyVerticalGrid(
             columns = GridCells.Fixed(prefs.columns),
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .nestedScroll(closeConnection),
+                .nestedScroll(connection),
             contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 24.dp),
         ) {
-            items(filtered, key = { it.key }) { entry ->
-                DrawerIcon(vm, entry, showLabel = query.isNotBlank())
+            items(filtered, key = { it.key }, contentType = { "app" }) { entry ->
+                DrawerIcon(vm, entry, showLabel = showLabels)
             }
         }
     }
@@ -231,10 +255,12 @@ private fun DrawerIcon(vm: LauncherViewModel, entry: AppEntry, showLabel: Boolea
     val ink = LocalInk.current
     val prefs = LocalPrefs.current
     var menu by remember { mutableStateOf(false) }
+    val onClick = remember(entry.key) { { vm.launch(entry) } }
+    val onLongClick = remember(entry.key) { { menu = true } }
     Column(
         Modifier
             .fillMaxWidth()
-            .combinedClickable(onClick = { vm.launch(entry) }, onLongClick = { menu = true })
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .padding(vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

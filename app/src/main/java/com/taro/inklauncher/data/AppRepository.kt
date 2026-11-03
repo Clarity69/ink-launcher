@@ -13,6 +13,7 @@ import android.os.Looper
 import android.os.Process
 import android.os.UserHandle
 import android.os.UserManager
+import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,6 +27,7 @@ import kotlinx.coroutines.withContext
 import java.text.Collator
 import java.util.concurrent.ConcurrentHashMap
 
+@Immutable
 data class AppEntry(
     val key: String,
     val label: String,

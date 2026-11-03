@@ -23,6 +23,7 @@ import com.taro.inklauncher.data.HomeLayout
 import com.taro.inklauncher.data.ItemType
 import com.taro.inklauncher.data.LauncherPrefs
 import com.taro.inklauncher.data.Prefs
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -121,7 +122,11 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             repo.loaded.first { it }
+            layoutStore.loaded.first { it }
             ensureDefaultLayout()
+            // Prefetch ikon laci di background setelah layar utama tampil.
+            delay(800)
+            prefetchIcons()
         }
         // Ukuran grid berubah -> rapikan item yang keluar batas.
         viewModelScope.launch {
@@ -155,6 +160,16 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
             lastWeatherAt = 0L
         }
         glanceLine.value = calendarLine ?: weatherLine
+    }
+
+    private fun prefetchIcons() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val p = prefs.value
+            for (e in drawerApps.value) {
+                if (!isActive) break
+                iconProcessor.icon(e, p.fallbackStyle, e.packageName in p.forceGrayscale)
+            }
+        }
     }
 
     fun toast(@StringRes res: Int) {

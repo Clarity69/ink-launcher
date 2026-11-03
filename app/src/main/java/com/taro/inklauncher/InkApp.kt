@@ -1,6 +1,7 @@
 package com.taro.inklauncher
 
 import android.app.Application
+import android.os.StrictMode
 import com.taro.inklauncher.data.AppRepository
 import com.taro.inklauncher.data.IconProcessor
 import com.taro.inklauncher.data.LauncherPrefs
@@ -43,6 +44,18 @@ class InkApp : Application() {
         // Baca sekali secara sinkron agar tema tidak berkedip saat start.
         val initial = runBlocking { prefs.flow.first() }
         prefsState = prefs.flow.stateIn(appScope, SharingStarted.Eagerly, initial)
+        // Setelah pembacaan prefs sinkron di atas (sengaja, agar tema tidak berkedip),
+        // aktifkan StrictMode di build debug untuk menangkap kerja berat di main thread.
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .build(),
+            )
+        }
         appRepository = AppRepository(this, appScope)
         iconProcessor = IconProcessor(this, appRepository)
         layoutStore = LayoutStore(this, appScope)

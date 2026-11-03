@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -32,6 +33,9 @@ import com.taro.inklauncher.ui.common.InkMenu
 import com.taro.inklauncher.ui.common.LocalPrefs
 import com.taro.inklauncher.ui.common.MenuAction
 import kotlin.math.roundToInt
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import android.content.pm.ShortcutInfo
 
 /** Ikon aplikasi di layar utama/dock: tap = buka, tahan = menu, tahan+geser = pindahkan. */
 @Composable
@@ -122,8 +126,8 @@ fun AppMenu(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
-    val shortcuts = remember(expanded, entry.key) {
-        if (expanded) vm.repo.shortcuts(entry) else emptyList()
+    val shortcuts by produceState(emptyList<ShortcutInfo>(), expanded, entry.key) {
+        value = if (expanded) withContext(Dispatchers.IO) { vm.repo.shortcuts(entry) } else emptyList()
     }
     val sAppInfo = stringResource(R.string.menu_app_info)
     val sUninstall = stringResource(R.string.menu_uninstall)

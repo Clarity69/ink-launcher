@@ -80,8 +80,20 @@ class LayoutStore(context: Context, private val scope: CoroutineScope) {
     private val mutex = Mutex()
     private var saveJob: Job? = null
 
-    private val _layout = MutableStateFlow(load())
+    private val _layout = MutableStateFlow(HomeLayout())
     val layout: StateFlow<HomeLayout> = _layout
+
+    private val _loaded = MutableStateFlow(false)
+    val loaded: StateFlow<Boolean> = _loaded
+
+    init {
+        // Baca file di IO, bukan di main thread.
+        scope.launch {
+            val l = withContext(Dispatchers.IO) { load() }
+            _layout.value = l
+            _loaded.value = true
+        }
+    }
 
     private fun load(): HomeLayout = runCatching {
         if (file.exists()) LayoutJson.decodeFromString(HomeLayout.serializer(), file.readText()) else HomeLayout()
