@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">InkLauncher</string>
+    <string name="settings_launcher_label">Pengaturan InkLauncher</string>
+
+    <!-- Umum -->
+    <string name="action_cancel">Batal</string>
+    <string name="action_clear">Hapus teks</string>
+    <string name="action_back">Kembali</string>
+    <string name="action_save">Simpan</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_ok">OK</string>
+    <string name="action_copy">Salin</string>
+    <string name="action_add">Tambah</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_duplicate">Duplikat</string>
+    <string name="action_export">Ekspor</string>
+    <string name="action_import">Impor</string>
+    <string name="action_open_settings">Buka pengaturan</string>
+    <string name="copied">Disalin ke papan klip</string>
+
+    <!-- Pesan -->
+    <string name="msg_added_home">Ditambahkan ke layar utama</string>
+    <string name="msg_home_full">Layar utama penuh</string>
+    <string name="msg_enable_lock_service">Aktifkan layanan aksesibilitas InkLauncher untuk mengunci layar dengan ketuk dua kali.</string>
+    <string name="move_hint">Ketuk tempat tujuan</string>
+
+    <!-- Menu ikon -->
+    <string name="menu_app_info">Info aplikasi</string>
+    <string name="menu_uninstall">Uninstall</string>
+    <string name="menu_remove_home">Hapus dari layar utama</string>
+    <string name="menu_move">Pindahkan</string>
+    <string name="menu_add_home">Tambah ke layar utama</string>
+    <string name="menu_hide">Sembunyikan</string>
+
+    <!-- Menu area kosong -->
+    <string name="menu_wallpaper">Wallpaper</string>
+    <string name="menu_widgets">Widget</string>
+    <string name="menu_custom_widgets">Widget kustom</string>
+    <string name="menu_launcher_settings">Pengaturan launcher</string>
+
+    <!-- Pencarian & laci -->
+    <string name="cd_voice_search">Pencarian suara</string>
+    <string name="cd_lens">Google Lens</string>
+    <string name="drawer_search_hint">Cari aplikasi</string>
+
+    <!-- Pengaturan -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_make_default">Jadikan launcher default</string>
+
+    <!-- Aksesibilitas -->
+    <string name="a11y_label">InkLauncher – kunci layar</string>
+    <string name="a11y_description">Dipakai hanya untuk mengunci layar saat Anda mengetuk dua kali area kosong layar utama. Layanan ini tidak membaca isi layar.</string>
+</resources>

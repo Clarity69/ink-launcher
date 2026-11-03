@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Tetesan tinta -->
+    <path
+        android:fillColor="#FF111111"
+        android:pathData="M54,30 C54,30 40,47 40,57 C40,65 46.3,71 54,71 C61.7,71 68,65 68,57 C68,47 54,30 54,30 Z" />
+    <!-- Garis "kertas" di bawah -->
+    <path
+        android:fillColor="#FF111111"
+        android:pathData="M38,76 L70,76 L70,79 L38,79 Z" />
+</vector>

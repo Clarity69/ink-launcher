@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+/app/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.navigation/
+*.hprof
+
+# Kunci & rahasia
+*.jks
+*.keystore
+keystore.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kotlin
+.kotlin/
