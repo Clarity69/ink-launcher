@@ -5,6 +5,13 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+// Release signing dibaca dari environment (diisi GitHub Actions dari Secrets).
+// Bila tidak ada, build release tetap jalan tanpa signing (APK unsigned).
+val releaseKeystore: File? = System.getenv("KEYSTORE_FILE")
+    ?.takeIf { it.isNotBlank() }
+    ?.let { file(it) }
+    ?.takeIf { it.exists() }
+
 android {
     namespace = "com.taro.inklauncher"
     compileSdk = 35
@@ -13,10 +20,21 @@ android {
         applicationId = "com.taro.inklauncher"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = ((System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0) + 100).coerceAtLeast(2)
+        versionName = "1.1.0"
         resourceConfigurations += listOf("en")
         vectorDrawables.useSupportLibrary = false
+    }
+
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = releaseKeystore
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -24,8 +42,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Ditandatangani dengan kunci debug agar APK rilis bisa langsung dipasang.
-            signingConfig = signingConfigs.getByName("debug")
+            if (releaseKeystore != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             isMinifyEnabled = false

@@ -36,12 +36,51 @@ jobs:
           fi
           chmod +x gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      # Keystore ditulis ke $RUNNER_TEMP (di luar folder repo) dan dihapus di akhir job.
+      - name: Decode keystore
+        id: keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/inklauncher.jks"
+            echo "KEYSTORE_FILE=$RUNNER_TEMP/inklauncher.jks" >> "$GITHUB_ENV"
+            echo "has_keystore=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Secret KEYSTORE_BASE64 is not set. Building a debug APK as a fallback (see README > Release signing)."
+            echo "has_keystore=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Upload APK
+      - name: Build signed release APK
+        if: steps.keystore.outputs.has_keystore == 'true'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Upload release APK
+        if: steps.keystore.outputs.has_keystore == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: InkLauncher-release
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      # Fallback tanpa secret: APK debug untuk dipasang, plus release unsigned
+      # (tidak di-upload) hanya untuk memastikan R8/minify tetap lolos.
+      - name: Build debug APK (fallback)
+        if: steps.keystore.outputs.has_keystore != 'true'
+        run: ./gradlew assembleDebug assembleRelease --stacktrace
+
+      - name: Upload debug APK
+        if: steps.keystore.outputs.has_keystore != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: InkLauncher-apk
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+      - name: Remove keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/inklauncher.jks"

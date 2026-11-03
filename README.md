@@ -78,6 +78,41 @@ To start a build manually: Actions tab → **Build APK** → **Run workflow**.
 > 3. Install the release APK.
 > 4. Restore the backup.
 
+## Release signing
+
+Release APKs are signed in GitHub Actions with your own keystore, which is stored as GitHub Secrets. The keystore and its passwords are **never** committed: `*.jks`, `*.keystore` and `keystore.properties` are in `.gitignore`. If the secrets are missing, the workflow still builds a debug APK and logs a warning.
+
+Run these commands yourself in the **fish** shell. Every password is typed interactively; none of them go into the command line.
+
+**1. Install keytool (if needed) and create the keystore** (RSA 4096, valid for 10000 days):
+
+```fish
+type -q keytool; or sudo pacman -S --needed jre-openjdk-headless
+mkdir -p ~/keys; chmod 700 ~/keys
+keytool -genkeypair -v -storetype PKCS12 -keystore ~/keys/inklauncher.jks -alias inklauncher -keyalg RSA -keysize 4096 -validity 10000
+```
+
+keytool asks for a password and your name/organization. With PKCS12 the key password is the same as the keystore password.
+
+**2–3. Encode the keystore as single-line base64 and save the four secrets**:
+
+```fish
+base64 -w0 ~/keys/inklauncher.jks | gh secret set KEYSTORE_BASE64 -R Clarity69/ink-launcher
+gh secret set KEYSTORE_PASSWORD -R Clarity69/ink-launcher
+gh secret set KEY_PASSWORD -R Clarity69/ink-launcher
+gh secret set KEY_ALIAS -R Clarity69/ink-launcher --body inklauncher
+```
+
+`KEYSTORE_PASSWORD` and `KEY_PASSWORD` prompt for the value; enter the same password both times. Then start a build:
+
+```fish
+gh workflow run build.yml -R Clarity69/ink-launcher
+```
+
+**4. Back up the keystore.** Copy `~/keys/inklauncher.jks` to at least one safe place outside this laptop (an encrypted USB drive or a password manager that stores files), and keep the password in your password manager.
+
+> ⚠️ **If the keystore or its password is lost, updates can no longer be installed over the existing app.** You would have to uninstall it, which loses your layout and custom widgets.
+
 ## Set as default launcher on MIUI
 
 **Settings → Apps → Manage apps → (⋮) Default apps → Home screen → InkLauncher**
