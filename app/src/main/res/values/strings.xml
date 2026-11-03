@@ -125,6 +125,130 @@
     <!-- Pengaturan -->
     <string name="settings_title">Pengaturan</string>
     <string name="settings_make_default">Jadikan launcher default</string>
+    <string name="settings_make_default_sub">Buka pengaturan aplikasi layar utama</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_appearance_sub">Tema, grid, ukuran &amp; bentuk ikon, At a Glance</string>
+    <string name="settings_icons">Ikon</string>
+    <string name="settings_icons_sub">Gaya fallback, sumber ikon, refresh cache</string>
+    <string name="settings_gestures">Gestur</string>
+    <string name="settings_gestures_sub">Swipe atas/bawah, ketuk dua kali</string>
+    <string name="settings_hidden">Aplikasi tersembunyi</string>
+    <string name="settings_hidden_sub">Tampilkan kembali aplikasi yang disembunyikan</string>
+    <string name="settings_custom_widgets_sub">Buat, edit, impor &amp; ekspor widget</string>
+    <string name="settings_backup">Cadangkan &amp; pulihkan</string>
+    <string name="settings_backup_sub">Tata letak, widget kustom, dan pengaturan ke file JSON</string>
+    <string name="settings_about">Tentang</string>
+    <string name="msg_permission_denied">Izin ditolak</string>
+
+    <string name="settings_theme">Tema</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="theme_auto">Otomatis</string>
+    <string name="settings_show_wallpaper">Tampilkan wallpaper sistem</string>
+    <string name="settings_show_wallpaper_sub">Mati = latar kertas polos ala e-ink</string>
+    <string name="settings_grid">Grid</string>
+    <string name="settings_columns">Kolom</string>
+    <string name="settings_rows">Baris</string>
+    <string name="settings_pages">Jumlah halaman</string>
+    <string name="settings_dock_count">Ikon di dock</string>
+    <string name="settings_icon_look">Ikon</string>
+    <string name="settings_icon_size">Ukuran ikon</string>
+    <string name="shape_none">Tanpa latar</string>
+    <string name="shape_circle_outline">Lingkaran</string>
+    <string name="shape_squircle_outline">Squircle</string>
+    <string name="settings_home">Layar utama</string>
+    <string name="settings_show_search">Tampilkan bilah pencarian</string>
+    <string name="settings_show_glance">Tampilkan At a Glance</string>
+    <string name="settings_glance_calendar">Acara kalender terdekat</string>
+    <string name="settings_glance_calendar_sub">Butuh izin kalender</string>
+    <string name="settings_glance_weather">Cuaca (Open-Meteo)</string>
+    <string name="settings_glance_weather_sub">Butuh izin lokasi perkiraan &amp; internet, diperbarui tiap 30 menit</string>
+    <string name="settings_drawer">Laci aplikasi</string>
+    <string name="settings_drawer_keyboard">Keyboard muncul otomatis</string>
+
+    <string name="gestures_note">Gestur launcher hanya dibaca di area tengah layar, jadi gestur back (tepi kiri/kanan) dan home (bawah) dari sistem tidak terganggu.</string>
+    <string name="gesture_swipe_up">Swipe ke atas: buka laci aplikasi</string>
+    <string name="gesture_swipe_down">Swipe ke bawah: buka notifikasi</string>
+    <string name="gesture_double_tap">Ketuk dua kali: kunci layar</string>
+    <string name="gesture_double_tap_sub">Butuh layanan aksesibilitas InkLauncher</string>
+    <string name="gesture_a11y">Layanan aksesibilitas</string>
+    <string name="gesture_a11y_on">Aktif</string>
+    <string name="gesture_a11y_off">Belum aktif – ketuk untuk membuka pengaturan</string>
+
+    <string name="settings_fallback_style">Gaya fallback</string>
+    <string name="fallback_material">Material</string>
+    <string name="fallback_grayscale">Grayscale</string>
+    <string name="settings_refresh_icons">Refresh cache ikon</string>
+    <string name="settings_refresh_icons_sub">Proses ulang semua ikon</string>
+    <string name="msg_icons_refreshed">Cache ikon dibersihkan</string>
+    <string name="settings_icon_sources">Aplikasi &amp; sumber ikon</string>
+    <string name="settings_icon_sources_sub">Aktifkan sakelar untuk memaksa ikon grayscale pada aplikasi tertentu.</string>
+    <string name="icon_source_themed">Themed icon (Android 13+)</string>
+    <string name="icon_source_material">Fallback: Material Symbols</string>
+    <string name="icon_source_grayscale">Fallback: grayscale</string>
+
+    <!-- Perbaiki gestur MIUI -->
+    <string name="miui_fix_title">Perbaiki gestur MIUI</string>
+    <string name="miui_fix_sub">Jika gestur layar penuh berubah jadi tombol</string>
+    <string name="miui_fix_problem_title">Masalahnya</string>
+    <string name="miui_fix_problem">Di beberapa versi MIUI, gestur layar penuh otomatis dimatikan (atau kembali ke tombol navigasi) ketika launcher pihak ketiga seperti InkLauncher dijadikan default. Perbaikannya adalah mengubah satu pengaturan sistem: force_fsg_nav_bar = 1, yang memaksa MIUI tetap memakai gestur layar penuh.</string>
+    <string name="miui_fix_disclaimer">Catatan: ini bergantung pada versi MIUI dan bukan jaminan. Animasi recents mungkin tetap memakai animasi sistem.</string>
+    <string name="miui_fix_status">Status</string>
+    <string name="miui_fix_current_value">Nilai force_fsg_nav_bar</string>
+    <string name="miui_fix_value_unknown">Tidak bisa dibaca (butuh Shizuku)</string>
+    <string name="miui_fix_value_on">1 – gestur layar penuh dipaksa aktif</string>
+    <string name="miui_fix_value_off">%1$s – tidak dipaksa</string>
+    <string name="shizuku_not_installed">Tidak terpasang</string>
+    <string name="shizuku_not_running">Terpasang, tapi belum berjalan</string>
+    <string name="shizuku_no_permission">Berjalan, izin belum diberikan</string>
+    <string name="shizuku_ready">Siap</string>
+    <string name="miui_fix_with_shizuku">Cara 1: lewat Shizuku</string>
+    <string name="shizuku_grant">Izinkan Shizuku</string>
+    <string name="miui_fix_enable">Aktifkan (1)</string>
+    <string name="miui_fix_restore">Kembalikan (0)</string>
+    <string name="shizuku_get">Dapatkan Shizuku</string>
+    <string name="miui_fix_applied">Berhasil diterapkan</string>
+    <string name="miui_fix_failed">Gagal:</string>
+    <string name="miui_fix_with_adb">Cara 2: lewat ADB dari komputer</string>
+    <string name="miui_fix_adb_steps">1. Aktifkan Opsi pengembang (Setelan → Tentang ponsel → ketuk Versi MIUI 7 kali).
+2. Di Setelan tambahan → Opsi pengembang, aktifkan Debugging USB (dan Debugging USB (Setelan keamanan) bila ada).
+3. Sambungkan HP ke komputer yang sudah terpasang platform-tools (adb), izinkan sidik jari RSA di HP.
+4. Jalankan perintah di bawah di terminal komputer:</string>
+    <string name="miui_fix_after">Setelah itu, buka Setelan → Layar beranda / Sistem navigasi dan pilih Gestur layar penuh bila belum. Untuk mengembalikan, jalankan perintah dengan nilai 0.</string>
+
+    <!-- Aplikasi tersembunyi -->
+    <string name="hidden_empty">Tidak ada aplikasi tersembunyi. Tahan ikon di laci lalu pilih Sembunyikan.</string>
+    <string name="hidden_show">Tampilkan</string>
+
+    <!-- Cadangan -->
+    <string name="backup_note">Cadangan berisi tata letak layar utama, dock, widget kustom, dan pengaturan. Widget sistem dari aplikasi lain tidak ikut dan perlu ditambahkan ulang.</string>
+    <string name="backup_create">Cadangkan ke file</string>
+    <string name="backup_create_sub">Simpan sebagai JSON</string>
+    <string name="backup_restore">Pulihkan dari file</string>
+    <string name="backup_restore_sub">Menimpa tata letak &amp; widget kustom saat ini</string>
+    <string name="msg_backup_done">Cadangan disimpan</string>
+    <string name="msg_restore_done">Cadangan dipulihkan</string>
+
+    <!-- Tentang -->
+    <string name="about_version">Versi %1$s (%2$d)</string>
+    <string name="about_author">Dibuat oleh Taro.</string>
+    <string name="about_license_title">Lisensi</string>
+    <string name="about_license">InkLauncher adalah perangkat lunak bebas di bawah GNU General Public License v3.0 (GPL-3.0).</string>
+    <string name="about_attribution_title">Atribusi</string>
+    <string name="about_attr_lawnchair">Sebagian pendekatan (themed icon, intent Search/Lens, gestur notifikasi, alur widget) diadaptasi dari Lawnchair Launcher (GPL-3.0).</string>
+    <string name="about_attr_symbols">Ikon: Material Symbols Outlined oleh Google (Apache License 2.0).</string>
+    <string name="about_attr_fonts">Font: Figtree dan Instrument Serif (SIL Open Font License 1.1).</string>
+
+    <!-- Cuaca -->
+    <string name="weather_clear">Cerah</string>
+    <string name="weather_partly_cloudy">Cerah berawan</string>
+    <string name="weather_cloudy">Berawan</string>
+    <string name="weather_fog">Berkabut</string>
+    <string name="weather_drizzle">Gerimis</string>
+    <string name="weather_rain">Hujan</string>
+    <string name="weather_snow">Salju</string>
+    <string name="weather_showers">Hujan lokal</string>
+    <string name="weather_thunder">Badai petir</string>
 
     <!-- Aksesibilitas -->
     <string name="a11y_label">InkLauncher – kunci layar</string>

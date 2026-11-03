@@ -14,6 +14,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.taro.inklauncher.data.AppEntry
+import com.taro.inklauncher.data.Backup
+import com.taro.inklauncher.data.BackupJson
+import com.taro.inklauncher.data.GlanceProvider
 import com.taro.inklauncher.data.DOCK_SLOTS
 import com.taro.inklauncher.data.HomeItem
 import com.taro.inklauncher.data.HomeLayout
@@ -28,6 +31,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -100,6 +105,10 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
     val glanceLine = MutableStateFlow<GlanceLine?>(null)
 
     private var tickJob: Job? = null
+    private var glanceJob: Job? = null
+    private val glance = GlanceProvider(application)
+    private var weatherLine: GlanceLine? = null
+    private var lastWeatherAt = 0L
     var visible = false
         private set
 
@@ -114,6 +123,38 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
             repo.loaded.first { it }
             ensureDefaultLayout()
         }
+        // Ukuran grid berubah -> rapikan item yang keluar batas.
+        viewModelScope.launch {
+            prefs.map { Triple(it.columns, it.rows, it.pageCount) }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { (c, r, p) -> clampToGrid(c, r, p) }
+        }
+        // Fitur At a Glance diaktifkan/dimatikan -> segarkan segera.
+        viewModelScope.launch {
+            prefs.map { it.glanceCalendar to it.glanceWeather }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { refreshGlance(force = true) }
+        }
+    }
+
+    suspend fun refreshGlance(force: Boolean = false) {
+        val p = prefs.value
+        val calendarLine = if (p.glanceCalendar) glance.nextEvent() else null
+        if (p.glanceWeather) {
+            val t = System.currentTimeMillis()
+            val stale = t - lastWeatherAt > 30 * 60_000L
+            val retry = weatherLine == null && t - lastWeatherAt > 5 * 60_000L
+            if (force || stale || retry) {
+                lastWeatherAt = t
+                glance.weather()?.let { weatherLine = it }
+            }
+        } else {
+            weatherLine = null
+            lastWeatherAt = 0L
+        }
+        glanceLine.value = calendarLine ?: weatherLine
     }
 
     fun toast(@StringRes res: Int) {
@@ -170,7 +211,14 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
     fun setVisible(v: Boolean) {
         visible = v
         tickJob?.cancel()
+        glanceJob?.cancel()
         if (v) {
+            glanceJob = viewModelScope.launch {
+                while (isActive) {
+                    refreshGlance()
+                    delay(60_000L)
+                }
+            }
             tickJob = viewModelScope.launch {
                 while (isActive) {
                     val t = System.currentTimeMillis()
@@ -433,6 +481,32 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
         layoutStore.update { l ->
             if (l.initialized) l else l.copy(items = l.items + items, dock = dock, initialized = true)
         }
+    }
+
+    // ---------- Cadangan ----------
+
+    suspend fun exportBackup(): String {
+        val backup = Backup(
+            layout = layout.value.copy(items = layout.value.items.filterNot { it.type == ItemType.WIDGET }),
+            customWidgets = customWidgets.widgets.value,
+            prefs = prefsStore.exportMap(prefs.value),
+        )
+        return BackupJson.encodeToString(Backup.serializer(), backup)
+    }
+
+    suspend fun importBackup(text: String) {
+        val backup = BackupJson.decodeFromString(Backup.serializer(), text)
+        layout.value.items.filter { it.type == ItemType.WIDGET }.forEach { onItemRemoved(it) }
+        layoutStore.replace(
+            backup.layout.copy(
+                items = backup.layout.items.filterNot { it.type == ItemType.WIDGET },
+                initialized = true,
+            ),
+        )
+        customWidgets.replaceAll(backup.customWidgets)
+        prefsStore.importMap(backup.prefs)
+        val p = prefsStore.flow.first()
+        clampToGrid(p.columns, p.rows, p.pageCount)
     }
 
     fun clampToGrid(cols: Int, rows: Int, pages: Int) {
