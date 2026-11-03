@@ -47,7 +47,6 @@ fun SettingsScreen(vm: LauncherViewModel, page: SettingsPage) {
         SettingsPage.APPEARANCE -> AppearanceSettings(vm)
         SettingsPage.ICONS -> IconSettings(vm)
         SettingsPage.GESTURES -> GestureSettings(vm)
-        SettingsPage.MIUI_FIX -> MiuiFixScreen(vm)
         SettingsPage.HIDDEN -> HiddenAppsScreen(vm)
         SettingsPage.BACKUP -> BackupScreen(vm)
         SettingsPage.ABOUT -> AboutScreen(vm)
@@ -84,9 +83,6 @@ private fun SettingsRoot(vm: LauncherViewModel) {
             })
             SettingRow(stringResource(R.string.settings_gestures), stringResource(R.string.settings_gestures_sub), R.drawable.ic_ms_gesture, onClick = {
                 vm.openScreen(Screen.Settings(SettingsPage.GESTURES))
-            })
-            SettingRow(stringResource(R.string.miui_fix_title), stringResource(R.string.miui_fix_sub), R.drawable.ic_ms_swipe_up, onClick = {
-                vm.openScreen(Screen.Settings(SettingsPage.MIUI_FIX))
             })
             SettingRow(stringResource(R.string.settings_hidden), stringResource(R.string.settings_hidden_sub), R.drawable.ic_ms_visibility_off, onClick = {
                 vm.openScreen(Screen.Settings(SettingsPage.HIDDEN))
@@ -193,19 +189,6 @@ private fun GestureSettings(vm: LauncherViewModel) {
             )
             SwitchRow(stringResource(R.string.gesture_swipe_up), null, prefs.gestureSwipeUp) { vm.setPref(set, Prefs.Keys.GESTURE_UP, it) }
             SwitchRow(stringResource(R.string.gesture_swipe_down), null, prefs.gestureSwipeDown) { vm.setPref(set, Prefs.Keys.GESTURE_DOWN, it) }
-            SwitchRow(stringResource(R.string.gesture_double_tap), stringResource(R.string.gesture_double_tap_sub), prefs.gestureDoubleTap) {
-                vm.setPref(set, Prefs.Keys.GESTURE_DOUBLE_TAP, it)
-            }
-            val running = com.taro.inklauncher.system.LockAccessibilityService.isRunning
-            SettingRow(
-                stringResource(R.string.gesture_a11y),
-                stringResource(if (running) R.string.gesture_a11y_on else R.string.gesture_a11y_off),
-                R.drawable.ic_ms_lock,
-                onClick = { LaunchHelper.accessibilitySettings(context) },
-            )
-            SettingRow(stringResource(R.string.miui_fix_title), stringResource(R.string.miui_fix_sub), R.drawable.ic_ms_swipe_up, onClick = {
-                vm.openScreen(Screen.Settings(SettingsPage.MIUI_FIX))
-            })
         }
     }
 }

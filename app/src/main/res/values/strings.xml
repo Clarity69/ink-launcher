@@ -52,6 +52,7 @@
     <!-- Pencarian & laci -->
     <string name="cd_voice_search">Pencarian suara</string>
     <string name="cd_lens">Google Lens</string>
+    <string name="cd_app_drawer">Laci aplikasi</string>
     <string name="drawer_search_hint">Cari aplikasi</string>
 
     <!-- Widget kustom -->

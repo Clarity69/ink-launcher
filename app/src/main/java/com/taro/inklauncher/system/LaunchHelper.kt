@@ -114,9 +114,6 @@ object LaunchHelper {
         ),
     )
 
-    fun accessibilitySettings(context: Context): Boolean =
-        tryStart(context, listOf(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
-
     fun url(context: Context, url: String): Boolean =
         tryStart(context, listOf(Intent(Intent.ACTION_VIEW, Uri.parse(url))))
 }

@@ -1,6 +1,5 @@
 package com.taro.inklauncher.ui.home
 
-import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -19,12 +18,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.mandatorySystemGestures
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.systemGestures
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -40,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -61,23 +59,21 @@ import com.taro.inklauncher.data.AppEntry
 import com.taro.inklauncher.data.HomeLayout
 import com.taro.inklauncher.data.ItemType
 import com.taro.inklauncher.system.LaunchHelper
-import com.taro.inklauncher.system.LockAccessibilityService
 import com.taro.inklauncher.system.StatusBarHelper
 import com.taro.inklauncher.ui.common.AppIconImage
 import com.taro.inklauncher.ui.common.InkMenu
 import com.taro.inklauncher.ui.common.LocalPrefs
 import com.taro.inklauncher.ui.common.MenuAction
+import com.taro.inklauncher.ui.common.MsIcon
 import com.taro.inklauncher.ui.glance.AtAGlance
 import com.taro.inklauncher.ui.search.PixelSearchBar
 import com.taro.inklauncher.ui.theme.InkMotion
 import com.taro.inklauncher.ui.theme.LocalInk
 import kotlin.math.roundToInt
 
-/** Area aman: gestur sistem (back/home) di tepi tidak pernah disentuh launcher. */
+/** Area aman: status bar, navigation bar (tombol), dan cutout. */
 @Composable
 fun safeInsets(): WindowInsets = WindowInsets.systemBars
-    .union(WindowInsets.systemGestures)
-    .union(WindowInsets.mandatorySystemGestures)
     .union(WindowInsets.displayCutout)
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -111,13 +107,6 @@ fun HomeScreen(vm: LauncherViewModel) {
     val swipeThreshold = with(density) { 56.dp.toPx() }
     val onSwipeUp by rememberUpdatedState { if (prefs.gestureSwipeUp) vm.openDrawer() }
     val onSwipeDown by rememberUpdatedState { if (prefs.gestureSwipeDown) StatusBarHelper.expandNotifications(context) }
-    val lockMsg = stringResource(R.string.msg_enable_lock_service)
-    val onDoubleTap by rememberUpdatedState {
-        if (!LockAccessibilityService.lockScreen()) {
-            Toast.makeText(context, lockMsg, Toast.LENGTH_LONG).show()
-            LaunchHelper.accessibilitySettings(context)
-        }
-    }
 
     Box(
         Modifier
@@ -155,17 +144,12 @@ fun HomeScreen(vm: LauncherViewModel) {
                     key = { it },
                 ) { page ->
                     Box(Modifier.fillMaxSize()) {
-                        // Lapisan latar: tahan area kosong = menu, double-tap = kunci layar.
+                        // Lapisan latar: tahan area kosong = menu.
                         Box(
                             Modifier
                                 .matchParentSize()
-                                .pointerInput(prefs.gestureDoubleTap) {
+                                .pointerInput(Unit) {
                                     detectTapGestures(
-                                        onDoubleTap = if (prefs.gestureDoubleTap) {
-                                            { _ -> onDoubleTap() }
-                                        } else {
-                                            null
-                                        },
                                         onLongPress = { off ->
                                             vm.homeMenu.value = off + (pageOrigin[page] ?: Offset.Zero)
                                         },
@@ -386,32 +370,56 @@ fun Dock(
     val count = prefs.dockCount
     val dock = layout.dockSafe()
     drag.dockCount = count
+    val drawerLabel = stringResource(R.string.cd_app_drawer)
     Row(
         Modifier
             .fillMaxWidth()
-            .height((prefs.iconSizeDp + 28).dp)
-            .onGloballyPositioned { drag.dockBounds = it.boundsInRoot() },
+            .height((prefs.iconSizeDp + 28).dp),
     ) {
-        for (i in 0 until count) {
+        Row(
+            Modifier
+                .weight(count.toFloat())
+                .fillMaxHeight()
+                .onGloballyPositioned { drag.dockBounds = it.boundsInRoot() },
+        ) {
+            for (i in 0 until count) {
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val entry = dock.getOrNull(i)?.let { appMap[it] }
+                    if (entry != null) {
+                        AppCell(vm, entry, MoveSource.Dock(i), drag)
+                    }
+                    if (moving != null) {
+                        Box(
+                            Modifier
+                                .matchParentSize()
+                                .padding(4.dp)
+                                .border(1.dp, ink.muted, RoundedCornerShape(12.dp))
+                                .clickable { vm.dropMove(DropTarget.Dock(i)) },
+                        )
+                    }
+                }
+            }
+        }
+        // Tombol laci aplikasi (alternatif dari swipe ke atas).
+        Box(
+            Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
+        ) {
             Box(
                 Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+                    .size(prefs.iconSizeDp.dp)
+                    .clip(CircleShape)
+                    .clickable { vm.openDrawer() },
                 contentAlignment = Alignment.Center,
             ) {
-                val entry = dock.getOrNull(i)?.let { appMap[it] }
-                if (entry != null) {
-                    AppCell(vm, entry, MoveSource.Dock(i), drag)
-                }
-                if (moving != null) {
-                    Box(
-                        Modifier
-                            .matchParentSize()
-                            .padding(4.dp)
-                            .border(1.dp, ink.muted, RoundedCornerShape(12.dp))
-                            .clickable { vm.dropMove(DropTarget.Dock(i)) },
-                    )
-                }
+                MsIcon(R.drawable.ic_ms_apps, drawerLabel, size = (prefs.iconSizeDp * 0.6f).dp)
             }
         }
     }

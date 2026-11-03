@@ -49,7 +49,7 @@ sealed interface DropTarget {
     data class Dock(val index: Int) : DropTarget
 }
 
-enum class SettingsPage { ROOT, APPEARANCE, ICONS, GESTURES, MIUI_FIX, HIDDEN, BACKUP, ABOUT }
+enum class SettingsPage { ROOT, APPEARANCE, ICONS, GESTURES, HIDDEN, BACKUP, ABOUT }
 
 sealed interface Screen {
     data class Settings(val page: SettingsPage = SettingsPage.ROOT) : Screen

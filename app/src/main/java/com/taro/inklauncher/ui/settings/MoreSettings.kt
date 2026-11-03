@@ -3,7 +3,6 @@ package com.taro.inklauncher.ui.settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,27 +13,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,7 +36,6 @@ import com.taro.inklauncher.R
 import com.taro.inklauncher.data.FallbackStyle
 import com.taro.inklauncher.data.IconSource
 import com.taro.inklauncher.data.Prefs
-import com.taro.inklauncher.system.GestureFixer
 import com.taro.inklauncher.system.LaunchHelper
 import com.taro.inklauncher.ui.common.AppIconImage
 import com.taro.inklauncher.ui.common.ChipRow
@@ -59,7 +49,6 @@ import com.taro.inklauncher.ui.theme.LocalInk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rikka.shizuku.Shizuku
 
 @Composable
 private fun Paragraph(text: String) {
@@ -153,133 +142,6 @@ fun IconSettings(vm: LauncherViewModel) {
                     })
                 }
             }
-        }
-    }
-}
-
-// ---------------- Perbaiki gestur MIUI ----------------
-
-@Composable
-fun MiuiFixScreen(vm: LauncherViewModel) {
-    val context = LocalContext.current
-    val ink = LocalInk.current
-    val scope = rememberCoroutineScope()
-    val clipboard = LocalClipboardManager.current
-    val copied = stringResource(R.string.copied)
-    val okMsg = stringResource(R.string.miui_fix_applied)
-    val failMsg = stringResource(R.string.miui_fix_failed)
-
-    var value by remember { mutableStateOf<String?>(null) }
-    var running by remember { mutableStateOf(false) }
-    var granted by remember { mutableStateOf(false) }
-    var installed by remember { mutableStateOf(false) }
-
-    fun refresh() {
-        installed = GestureFixer.isShizukuInstalled(context)
-        running = GestureFixer.isShizukuRunning()
-        granted = GestureFixer.hasPermission()
-        scope.launch { value = GestureFixer.readValue(context) }
-    }
-
-    fun apply(v: Int) {
-        scope.launch {
-            val r = GestureFixer.setValue(v)
-            Toast.makeText(context, if (r.isSuccess) okMsg else "$failMsg ${r.exceptionOrNull()?.message.orEmpty()}", Toast.LENGTH_LONG).show()
-            refresh()
-        }
-    }
-
-    DisposableEffect(Unit) {
-        val permListener = Shizuku.OnRequestPermissionResultListener { _, _ -> refresh() }
-        val binderListener = Shizuku.OnBinderReceivedListener { refresh() }
-        val deadListener = Shizuku.OnBinderDeadListener { refresh() }
-        runCatching {
-            Shizuku.addRequestPermissionResultListener(permListener)
-            Shizuku.addBinderReceivedListenerSticky(binderListener)
-            Shizuku.addBinderDeadListener(deadListener)
-        }
-        refresh()
-        onDispose {
-            runCatching {
-                Shizuku.removeRequestPermissionResultListener(permListener)
-                Shizuku.removeBinderReceivedListener(binderListener)
-                Shizuku.removeBinderDeadListener(deadListener)
-            }
-        }
-    }
-
-    InkScaffold(title = stringResource(R.string.miui_fix_title), onBack = vm::popScreen) {
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-            SectionTitle(stringResource(R.string.miui_fix_problem_title))
-            Paragraph(stringResource(R.string.miui_fix_problem))
-            Paragraph(stringResource(R.string.miui_fix_disclaimer))
-
-            SectionTitle(stringResource(R.string.miui_fix_status))
-            SettingRow(
-                stringResource(R.string.miui_fix_current_value),
-                when (value) {
-                    null -> stringResource(R.string.miui_fix_value_unknown)
-                    "1" -> stringResource(R.string.miui_fix_value_on)
-                    else -> stringResource(R.string.miui_fix_value_off, value.orEmpty())
-                },
-                R.drawable.ic_ms_info,
-                onClick = { refresh() },
-            )
-            SettingRow(
-                "Shizuku",
-                stringResource(
-                    when {
-                        !installed -> R.string.shizuku_not_installed
-                        !running -> R.string.shizuku_not_running
-                        !granted -> R.string.shizuku_no_permission
-                        else -> R.string.shizuku_ready
-                    },
-                ),
-                R.drawable.ic_ms_security,
-            )
-
-            SectionTitle(stringResource(R.string.miui_fix_with_shizuku))
-            Row(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-                if (running && !granted) {
-                    OutlinedButton(onClick = { GestureFixer.requestPermission() }) {
-                        Text(stringResource(R.string.shizuku_grant))
-                    }
-                } else {
-                    OutlinedButton(onClick = { apply(1) }, enabled = granted) {
-                        Text(stringResource(R.string.miui_fix_enable))
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    OutlinedButton(onClick = { apply(0) }, enabled = granted) {
-                        Text(stringResource(R.string.miui_fix_restore))
-                    }
-                }
-            }
-            if (!installed) {
-                TextButton(onClick = { LaunchHelper.url(context, "https://shizuku.rikka.app/") }, modifier = Modifier.padding(horizontal = 8.dp)) {
-                    Text(stringResource(R.string.shizuku_get), color = ink.fg)
-                }
-            }
-
-            SectionTitle(stringResource(R.string.miui_fix_with_adb))
-            Paragraph(stringResource(R.string.miui_fix_adb_steps))
-            listOf(GestureFixer.ADB_ON, GestureFixer.ADB_OFF, GestureFixer.ADB_GET).forEach { cmd ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                        .border(1.dp, ink.muted, RoundedCornerShape(10.dp))
-                        .padding(start = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(cmd, color = ink.fg, fontFamily = FontFamily.Monospace, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(vertical = 10.dp))
-                    TextButton(onClick = {
-                        clipboard.setText(AnnotatedString(cmd))
-                        Toast.makeText(context, copied, Toast.LENGTH_SHORT).show()
-                    }) { Text(stringResource(R.string.action_copy), color = ink.fg) }
-                }
-            }
-            Paragraph(stringResource(R.string.miui_fix_after))
-            Spacer(Modifier.padding(16.dp))
         }
     }
 }

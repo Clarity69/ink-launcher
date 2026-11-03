@@ -34,11 +34,7 @@ Package: `com.taro.inklauncher` · minSdk 26 · targetSdk 35 · Kotlin + Jetpack
   - Alur bind dan konfigurasi.
   - Resize dengan pegangan (snap ke grid) dan hapus.
 - **Editor widget kustom** (mirip KWGT, tapi ringan): lihat bagian di bawah.
-- **Gestur yang aman untuk MIUI**: gestur launcher hanya dibaca di area tengah layar. Tepi kiri/kanan/bawah dibiarkan untuk gestur back dan home sistem.
-  - Swipe atas: laci aplikasi.
-  - Swipe bawah: notifikasi.
-  - Ketuk dua kali: kunci layar (opsional, lewat layanan aksesibilitas).
-- **Perbaiki gestur MIUI** lewat Shizuku atau ADB.
+- **Navigasi**: swipe ke atas atau tombol laci di dock membuka laci aplikasi; swipe ke bawah membuka notifikasi (bisa dimatikan).
 - **Cadangkan & pulihkan** tata letak, widget kustom, dan pengaturan ke file JSON.
 
 ## Screenshot
@@ -69,34 +65,6 @@ Build manual: tab Actions → **Build APK** → **Run workflow**.
 **Setelan → Aplikasi → Kelola aplikasi → (⋮) Aplikasi default → Layar utama → InkLauncher**
 
 Cara lain: buka ikon **Pengaturan InkLauncher** di launcher lama → **Jadikan launcher default**.
-
-## Perbaiki gestur MIUI
-
-Beberapa versi MIUI mematikan gestur layar penuh (atau kembali ke tombol navigasi) saat launcher pihak ketiga dijadikan default. Perbaikannya adalah mengubah nilai sistem `force_fsg_nav_bar` menjadi `1`.
-
-> ⚠️ **Ini bergantung pada versi MIUI dan bukan jaminan.** Animasi recents mungkin tetap memakai animasi sistem, bukan animasi launcher.
-
-Buka **Pengaturan launcher → Perbaiki gestur MIUI**. Layar ini menampilkan nilai saat ini (bila bisa dibaca) dan dua cara perbaikan.
-
-### Cara 1: Shizuku (tanpa komputer setelah Shizuku aktif)
-
-1. Pasang [Shizuku](https://shizuku.rikka.app/), lalu jalankan lewat *Wireless debugging* atau ADB sesuai petunjuk di aplikasinya.
-2. Di InkLauncher, ketuk **Izinkan Shizuku**, lalu **Aktifkan (1)**.
-3. Untuk mengembalikan, ketuk **Kembalikan (0)**.
-
-### Cara 2: ADB dari komputer
-
-1. Aktifkan **Opsi pengembang**: Setelan → Tentang ponsel → ketuk *Versi MIUI* 7 kali.
-2. Di Setelan tambahan → Opsi pengembang, aktifkan **Debugging USB**.
-3. Sambungkan HP ke komputer yang sudah terpasang `adb` (platform-tools), lalu jalankan:
-
-```sh
-adb shell settings put global force_fsg_nav_bar 1   # aktifkan
-adb shell settings get global force_fsg_nav_bar     # cek nilai
-adb shell settings put global force_fsg_nav_bar 0   # kembalikan
-```
-
-Setelah itu, pilih **Gestur layar penuh** di Setelan → Layar beranda / Sistem navigasi bila belum terpilih.
 
 ## Widget kustom
 
@@ -145,7 +113,7 @@ app/src/main/java/com/taro/inklauncher/
 ├── ui/   theme, home, drawer, glance, search, settings, widgeteditor, common
 ├── data/ AppRepository, IconProcessor, MaterialIconMap, Prefs, LayoutStore, GlanceProvider, Backup
 ├── widget/ WidgetHostManager, custom/ (model JSON, renderer, token, font dot-matrix, preset)
-└── system/ GestureFixer (Shizuku), LockAccessibilityService, LaunchHelper, StatusBarHelper
+└── system/ LaunchHelper, StatusBarHelper
 ```
 
 Build hanya lewat GitHub Actions (`.github/workflows/build.yml`). Jika `gradle-wrapper.jar` belum ada, workflow membuatnya terlebih dahulu dengan `gradle wrapper`.
@@ -156,5 +124,4 @@ Build hanya lewat GitHub Actions (`.github/workflows/build.yml`). Jika `gradle-w
 - **[Lawnchair Launcher](https://github.com/LawnchairLauncher/lawnchair)** (GPL-3.0): beberapa pendekatan diadaptasi dan ditulis ulang secara ringan dengan Compose, yaitu themed/monochrome icon, intent Google Search/voice/Lens, gestur buka notifikasi, dan alur widget host. File yang mengadaptasi kode Lawnchair diberi komentar sumber di bagian atasnya. Modul Launcher3/AOSP dan Quickstep tidak dipakai.
 - **[Material Symbols](https://github.com/google/material-design-icons)** oleh Google, Apache License 2.0 ([licenses/Apache-2.0-MaterialSymbols.txt](licenses/Apache-2.0-MaterialSymbols.txt)).
 - **Font** [Figtree](https://github.com/erikdkennedy/figtree) dan [Instrument Serif](https://github.com/Instrument/instrument-serif), SIL Open Font License 1.1 ([licenses/](licenses/)).
-- **[Shizuku API](https://github.com/RikkaApps/Shizuku-API)**, MIT License.
 - Data cuaca dari **[Open-Meteo](https://open-meteo.com/)** (CC BY 4.0).
