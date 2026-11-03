@@ -60,6 +60,8 @@ import com.taro.inklauncher.data.AppEntry
 import com.taro.inklauncher.data.HomeLayout
 import com.taro.inklauncher.data.ItemType
 import com.taro.inklauncher.system.LaunchHelper
+import com.taro.inklauncher.system.LockAccessibilityService
+import android.widget.Toast
 import com.taro.inklauncher.system.StatusBarHelper
 import com.taro.inklauncher.ui.common.AppIconImage
 import com.taro.inklauncher.ui.common.InkMenu
@@ -110,6 +112,13 @@ fun HomeScreen(vm: LauncherViewModel, drawer: DrawerController) {
     val swipeUpEnabled by rememberUpdatedState(prefs.gestureSwipeUp)
     val onSwipeDown by rememberUpdatedState { if (prefs.gestureSwipeDown) StatusBarHelper.expandNotifications(context) }
     val blocked by rememberUpdatedState(moving != null || resizing != null)
+    val lockMsg = stringResource(R.string.msg_enable_lock_service)
+    val onDoubleTap by rememberUpdatedState {
+        if (!LockAccessibilityService.lockScreen()) {
+            Toast.makeText(context, lockMsg, Toast.LENGTH_LONG).show()
+            LaunchHelper.accessibilitySettings(context)
+        }
+    }
 
     Box(
         Modifier
@@ -166,12 +175,17 @@ fun HomeScreen(vm: LauncherViewModel, drawer: DrawerController) {
                     key = { it },
                 ) { page ->
                     Box(Modifier.fillMaxSize()) {
-                        // Lapisan latar: tahan area kosong = menu.
+                        // Lapisan latar: tahan area kosong = menu, ketuk dua kali = kunci layar.
                         Box(
                             Modifier
                                 .matchParentSize()
-                                .pointerInput(Unit) {
+                                .pointerInput(prefs.gestureDoubleTap) {
                                     detectTapGestures(
+                                        onDoubleTap = if (prefs.gestureDoubleTap) {
+                                            { _ -> onDoubleTap() }
+                                        } else {
+                                            null
+                                        },
                                         onLongPress = { off ->
                                             vm.homeMenu.value = off + (pageOrigin[page] ?: Offset.Zero)
                                         },

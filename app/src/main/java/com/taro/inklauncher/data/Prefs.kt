@@ -37,6 +37,7 @@ data class LauncherPrefs(
     val hiddenApps: Set<String> = emptySet(),
     val gestureSwipeUp: Boolean = true,
     val gestureSwipeDown: Boolean = true,
+    val gestureDoubleTap: Boolean = false,
     val showWallpaper: Boolean = false,
 )
 
@@ -64,6 +65,7 @@ class Prefs(context: Context) {
         val HIDDEN_APPS = stringSetPreferencesKey("hidden_apps")
         val GESTURE_UP = booleanPreferencesKey("gesture_swipe_up")
         val GESTURE_DOWN = booleanPreferencesKey("gesture_swipe_down")
+        val GESTURE_DOUBLE_TAP = booleanPreferencesKey("gesture_double_tap")
         val SHOW_WALLPAPER = booleanPreferencesKey("show_wallpaper")
     }
 
@@ -89,6 +91,7 @@ class Prefs(context: Context) {
                 hiddenApps = p[Keys.HIDDEN_APPS] ?: d.hiddenApps,
                 gestureSwipeUp = p[Keys.GESTURE_UP] ?: d.gestureSwipeUp,
                 gestureSwipeDown = p[Keys.GESTURE_DOWN] ?: d.gestureSwipeDown,
+                gestureDoubleTap = p[Keys.GESTURE_DOUBLE_TAP] ?: d.gestureDoubleTap,
                 showWallpaper = p[Keys.SHOW_WALLPAPER] ?: d.showWallpaper,
             )
         }
@@ -125,6 +128,7 @@ class Prefs(context: Context) {
         Keys.HIDDEN_APPS.name to current.hiddenApps.joinToString("\n"),
         Keys.GESTURE_UP.name to current.gestureSwipeUp.toString(),
         Keys.GESTURE_DOWN.name to current.gestureSwipeDown.toString(),
+        Keys.GESTURE_DOUBLE_TAP.name to current.gestureDoubleTap.toString(),
         Keys.SHOW_WALLPAPER.name to current.showWallpaper.toString(),
     )
 
@@ -140,7 +144,7 @@ class Prefs(context: Context) {
             str(Keys.ICON_SHAPE); bool(Keys.SHOW_SEARCH); bool(Keys.SHOW_GLANCE)
             int(Keys.PAGE_COUNT); int(Keys.DOCK_COUNT); bool(Keys.DRAWER_KEYBOARD)
             str(Keys.FALLBACK_STYLE); strSet(Keys.FORCE_GRAYSCALE); strSet(Keys.HIDDEN_APPS)
-            bool(Keys.GESTURE_UP); bool(Keys.GESTURE_DOWN)
+            bool(Keys.GESTURE_UP); bool(Keys.GESTURE_DOWN); bool(Keys.GESTURE_DOUBLE_TAP)
             bool(Keys.SHOW_WALLPAPER)
         }
     }

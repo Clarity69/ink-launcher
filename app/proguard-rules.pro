@@ -21,3 +21,6 @@
 # --- StatusBarManager.expandNotificationsPanel dipanggil lewat refleksi (kelas sistem, tidak di-obfuscate) ---
 
 # Compose & AndroidX membawa aturan consumer sendiri di AAR-nya.
+
+# Layanan aksesibilitas (dipanggil sistem)
+-keep class com.taro.inklauncher.system.LockAccessibilityService { *; }

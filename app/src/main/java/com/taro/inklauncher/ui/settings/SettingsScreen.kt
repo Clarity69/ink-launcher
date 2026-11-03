@@ -189,6 +189,16 @@ private fun GestureSettings(vm: LauncherViewModel) {
             )
             SwitchRow(stringResource(R.string.gesture_swipe_up), null, prefs.gestureSwipeUp) { vm.setPref(set, Prefs.Keys.GESTURE_UP, it) }
             SwitchRow(stringResource(R.string.gesture_swipe_down), null, prefs.gestureSwipeDown) { vm.setPref(set, Prefs.Keys.GESTURE_DOWN, it) }
+            SwitchRow(stringResource(R.string.gesture_double_tap), stringResource(R.string.gesture_double_tap_sub), prefs.gestureDoubleTap) {
+                vm.setPref(set, Prefs.Keys.GESTURE_DOUBLE_TAP, it)
+            }
+            val running = com.taro.inklauncher.system.LockAccessibilityService.isRunning
+            SettingRow(
+                stringResource(R.string.gesture_a11y),
+                stringResource(if (running) R.string.gesture_a11y_on else R.string.gesture_a11y_off),
+                R.drawable.ic_ms_lock,
+                onClick = { LaunchHelper.accessibilitySettings(context) },
+            )
         }
     }
 }

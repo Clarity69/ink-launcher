@@ -34,7 +34,7 @@ Package: `com.taro.inklauncher` · minSdk 26 · targetSdk 35 · Kotlin + Jetpack
   - Alur bind dan konfigurasi.
   - Resize dengan pegangan (snap ke grid) dan hapus.
 - **Editor widget kustom** (mirip KWGT, tapi ringan): lihat bagian di bawah.
-- **Navigasi**: swipe ke atas atau tombol laci di dock membuka laci aplikasi; swipe ke bawah membuka notifikasi (bisa dimatikan).
+- **Gestur launcher** (masing-masing bisa dimatikan): swipe ke atas atau tombol laci di dock membuka laci aplikasi, swipe ke bawah membuka notifikasi, ketuk dua kali mengunci layar (opsional, lewat layanan aksesibilitas).
 - **Cadangkan & pulihkan** tata letak, widget kustom, dan pengaturan ke file JSON.
 
 ## Screenshot
