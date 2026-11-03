@@ -164,8 +164,6 @@
     <string name="settings_glance_calendar_sub">Butuh izin kalender</string>
     <string name="settings_glance_weather">Cuaca (Open-Meteo)</string>
     <string name="settings_glance_weather_sub">Butuh izin lokasi perkiraan &amp; internet, diperbarui tiap 30 menit</string>
-    <string name="settings_drawer">Laci aplikasi</string>
-    <string name="settings_drawer_keyboard">Keyboard muncul otomatis</string>
 
     <string name="gestures_note">Gestur launcher hanya dibaca di area tengah layar, jadi gestur back (tepi kiri/kanan) dan home (bawah) dari sistem tidak terganggu.</string>
     <string name="gesture_swipe_up">Swipe ke atas: buka laci aplikasi</string>

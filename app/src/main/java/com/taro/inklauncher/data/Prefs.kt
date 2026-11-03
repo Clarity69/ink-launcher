@@ -31,7 +31,6 @@ data class LauncherPrefs(
     val glanceWeather: Boolean = false,
     val pageCount: Int = 1,
     val dockCount: Int = 4,
-    val drawerAutoKeyboard: Boolean = true,
     val fallbackStyle: FallbackStyle = FallbackStyle.MATERIAL,
     val forceGrayscale: Set<String> = emptySet(),
     val hiddenApps: Set<String> = emptySet(),
@@ -59,7 +58,6 @@ class Prefs(context: Context) {
         val GLANCE_WEATHER = booleanPreferencesKey("glance_weather")
         val PAGE_COUNT = intPreferencesKey("page_count")
         val DOCK_COUNT = intPreferencesKey("dock_count")
-        val DRAWER_KEYBOARD = booleanPreferencesKey("drawer_auto_keyboard")
         val FALLBACK_STYLE = stringPreferencesKey("fallback_style")
         val FORCE_GRAYSCALE = stringSetPreferencesKey("force_grayscale")
         val HIDDEN_APPS = stringSetPreferencesKey("hidden_apps")
@@ -85,7 +83,6 @@ class Prefs(context: Context) {
                 glanceWeather = p[Keys.GLANCE_WEATHER] ?: d.glanceWeather,
                 pageCount = (p[Keys.PAGE_COUNT] ?: d.pageCount).coerceIn(1, 5),
                 dockCount = (p[Keys.DOCK_COUNT] ?: d.dockCount).coerceIn(4, 5),
-                drawerAutoKeyboard = p[Keys.DRAWER_KEYBOARD] ?: d.drawerAutoKeyboard,
                 fallbackStyle = enumOr(p[Keys.FALLBACK_STYLE], d.fallbackStyle),
                 forceGrayscale = p[Keys.FORCE_GRAYSCALE] ?: d.forceGrayscale,
                 hiddenApps = p[Keys.HIDDEN_APPS] ?: d.hiddenApps,
@@ -122,7 +119,6 @@ class Prefs(context: Context) {
         Keys.SHOW_GLANCE.name to current.showGlance.toString(),
         Keys.PAGE_COUNT.name to current.pageCount.toString(),
         Keys.DOCK_COUNT.name to current.dockCount.toString(),
-        Keys.DRAWER_KEYBOARD.name to current.drawerAutoKeyboard.toString(),
         Keys.FALLBACK_STYLE.name to current.fallbackStyle.name,
         Keys.FORCE_GRAYSCALE.name to current.forceGrayscale.joinToString("\n"),
         Keys.HIDDEN_APPS.name to current.hiddenApps.joinToString("\n"),
@@ -142,7 +138,7 @@ class Prefs(context: Context) {
             }
             str(Keys.THEME); int(Keys.COLUMNS); int(Keys.ROWS); int(Keys.ICON_SIZE)
             str(Keys.ICON_SHAPE); bool(Keys.SHOW_SEARCH); bool(Keys.SHOW_GLANCE)
-            int(Keys.PAGE_COUNT); int(Keys.DOCK_COUNT); bool(Keys.DRAWER_KEYBOARD)
+            int(Keys.PAGE_COUNT); int(Keys.DOCK_COUNT)
             str(Keys.FALLBACK_STYLE); strSet(Keys.FORCE_GRAYSCALE); strSet(Keys.HIDDEN_APPS)
             bool(Keys.GESTURE_UP); bool(Keys.GESTURE_DOWN); bool(Keys.GESTURE_DOUBLE_TAP)
             bool(Keys.SHOW_WALLPAPER)

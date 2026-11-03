@@ -65,9 +65,7 @@ import com.taro.inklauncher.ui.common.MsIcon
 import com.taro.inklauncher.ui.home.AppMenu
 import com.taro.inklauncher.ui.home.safeInsets
 import com.taro.inklauncher.ui.theme.Figtree
-import com.taro.inklauncher.ui.theme.InkMotion
 import com.taro.inklauncher.ui.theme.LocalInk
-import kotlinx.coroutines.delay
 import java.text.Normalizer
 
 /**
@@ -119,14 +117,10 @@ private fun DrawerContent(vm: LauncherViewModel, drawer: DrawerController) {
         }
     }
 
+    // Keyboard hanya muncul saat kolom cari diketuk. Saat laci ditutup:
+    // sembunyikan keyboard, lepas fokus, dan kosongkan teks pencarian.
     LaunchedEffect(open) {
-        if (open) {
-            if (prefs.drawerAutoKeyboard) {
-                delay(InkMotion.MEDIUM.toLong())
-                runCatching { focus.requestFocus() }
-                keyboard?.show()
-            }
-        } else {
+        if (!open) {
             focusManager.clearFocus()
             keyboard?.hide()
             query = ""

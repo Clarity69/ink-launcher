@@ -164,10 +164,6 @@ private fun AppearanceSettings(vm: LauncherViewModel) {
                 }
             }
 
-            SectionTitle(stringResource(R.string.settings_drawer))
-            SwitchRow(stringResource(R.string.settings_drawer_keyboard), null, prefs.drawerAutoKeyboard) {
-                vm.setPref(set, Prefs.Keys.DRAWER_KEYBOARD, it)
-            }
         }
     }
 }
