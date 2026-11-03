@@ -64,6 +64,7 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
     val iconProcessor = ink.iconProcessor
     val layoutStore = ink.layoutStore
     val widgetHost = ink.widgetHost
+    val customWidgets = ink.customWidgets
     val prefsStore: Prefs = ink.prefs
     val prefs: StateFlow<LauncherPrefs> = ink.prefsState
     val layout: StateFlow<HomeLayout> = layoutStore.layout
@@ -224,6 +225,27 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
     /** Dipanggil sebelum item dihapus: lepaskan AppWidget id agar tidak bocor. */
     private fun onItemRemoved(item: HomeItem) {
         if (item.type == ItemType.WIDGET && item.appWidgetId != -1) widgetHost.deleteId(item.appWidgetId)
+    }
+
+    fun deleteCustomWidget(id: String) {
+        customWidgets.delete(id)
+        layoutStore.update { l -> l.copy(items = l.items.filterNot { it.type == ItemType.CUSTOM && it.customId == id }) }
+    }
+
+    fun addCustomToHome(widget: com.taro.inklauncher.widget.custom.CustomWidget) {
+        val p = prefs.value
+        val ok = addItemAtFreeSpot(
+            HomeItem(
+                type = ItemType.CUSTOM,
+                customId = widget.id,
+                w = widget.w.coerceIn(1, p.columns),
+                h = widget.h.coerceIn(1, p.rows),
+            ),
+        )
+        if (ok) {
+            toast(R.string.msg_added_home)
+            goHome()
+        }
     }
 
     fun startResize(id: String) {

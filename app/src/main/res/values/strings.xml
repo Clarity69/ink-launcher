@@ -54,6 +54,74 @@
     <string name="cd_lens">Google Lens</string>
     <string name="drawer_search_hint">Cari aplikasi</string>
 
+    <!-- Widget kustom -->
+    <string name="custom_widgets_title">Widget kustom</string>
+    <string name="custom_widgets_mine">Widget saya</string>
+    <string name="custom_widgets_empty">Belum ada widget kustom. Ketuk + untuk membuat, atau pakai salah satu preset di bawah.</string>
+    <string name="custom_widgets_presets">Preset (ketuk untuk menyalin)</string>
+    <string name="new_widget_name">Widget baru</string>
+    <string name="copy_suffix">(salinan)</string>
+    <string name="msg_exported">Widget diekspor</string>
+    <string name="msg_imported">Widget diimpor</string>
+    <string name="msg_invalid_file">File tidak valid</string>
+    <string name="msg_preset_added">Preset disalin ke Widget saya</string>
+    <string name="token_charging">mengisi</string>
+
+    <string name="editor_title">Editor widget</string>
+    <string name="editor_name">Nama widget</string>
+    <string name="editor_width_cells">Lebar (sel)</string>
+    <string name="editor_height_cells">Tinggi (sel)</string>
+    <string name="editor_layers">Layer</string>
+    <string name="editor_add_layer">Tambah layer</string>
+    <string name="editor_layer_up">Naikkan</string>
+    <string name="editor_layer_down">Turunkan</string>
+    <string name="editor_layer_name">Nama layer</string>
+    <string name="editor_position">Posisi &amp; ukuran</string>
+    <string name="editor_w">Lebar</string>
+    <string name="editor_h">Tinggi</string>
+    <string name="editor_align">Perataan</string>
+    <string name="editor_color">Warna</string>
+    <string name="editor_text">Teks (mendukung token)</string>
+    <string name="editor_font_size">Ukuran font</string>
+    <string name="editor_bold">Tebal</string>
+    <string name="editor_filled">Isi penuh</string>
+    <string name="editor_stroke">Ketebalan garis</string>
+    <string name="editor_corner">Sudut</string>
+    <string name="editor_24h">Format 24 jam</string>
+    <string name="editor_off_dots">Tampilkan titik mati</string>
+    <string name="editor_dots">Jumlah titik</string>
+    <string name="editor_action">Aksi saat diketuk</string>
+    <string name="editor_pick_app">Pilih aplikasi</string>
+    <string name="editor_no_app">Belum dipilih</string>
+
+    <string name="layer_text">Teks</string>
+    <string name="layer_box">Kotak</string>
+    <string name="layer_icon">Ikon</string>
+    <string name="layer_dot_clock">Jam dot-matrix</string>
+    <string name="layer_divider">Garis pemisah</string>
+    <string name="layer_dot_progress">Progres titik</string>
+
+    <string name="align_start">Kiri</string>
+    <string name="align_center">Tengah</string>
+    <string name="align_end">Kanan</string>
+    <string name="color_ink">Ink</string>
+    <string name="color_paper">Paper</string>
+    <string name="color_muted">Muted</string>
+    <string name="color_transparent">Transparan</string>
+    <string name="shape_rect">Persegi</string>
+    <string name="shape_capsule">Kapsul</string>
+    <string name="shape_circle">Lingkaran</string>
+    <string name="progress_battery">Baterai</string>
+    <string name="progress_day">Hari</string>
+    <string name="progress_year">Tahun</string>
+
+    <string name="action_none">Tidak ada</string>
+    <string name="action_open_app">Buka aplikasi</string>
+    <string name="action_google_search">Google Search</string>
+    <string name="action_google_lens">Google Lens</string>
+    <string name="action_clock">Jam</string>
+    <string name="action_calendar">Kalender</string>
+
     <!-- Pengaturan -->
     <string name="settings_title">Pengaturan</string>
     <string name="settings_make_default">Jadikan launcher default</string>

@@ -7,6 +7,7 @@ import com.taro.inklauncher.data.LauncherPrefs
 import com.taro.inklauncher.data.LayoutStore
 import com.taro.inklauncher.data.Prefs
 import com.taro.inklauncher.widget.WidgetHostManager
+import com.taro.inklauncher.widget.custom.CustomWidgetStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -33,6 +34,8 @@ class InkApp : Application() {
         private set
     lateinit var widgetHost: WidgetHostManager
         private set
+    lateinit var customWidgets: CustomWidgetStore
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -44,6 +47,7 @@ class InkApp : Application() {
         iconProcessor = IconProcessor(this, appRepository)
         layoutStore = LayoutStore(this, appScope)
         widgetHost = WidgetHostManager(this)
+        customWidgets = CustomWidgetStore(this, appScope)
         appRepository.start()
     }
 }
