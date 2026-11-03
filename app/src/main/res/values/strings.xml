@@ -24,6 +24,16 @@
     <string name="msg_home_full">Layar utama penuh</string>
     <string name="msg_enable_lock_service">Aktifkan layanan aksesibilitas InkLauncher untuk mengunci layar dengan ketuk dua kali.</string>
     <string name="move_hint">Ketuk tempat tujuan</string>
+    <string name="resize_hint">Seret pegangan untuk mengubah ukuran</string>
+    <string name="action_done">Selesai</string>
+    <string name="loading">Memuat…</string>
+
+    <!-- Widget -->
+    <string name="widget_picker_title">Widget</string>
+    <string name="widget_none">Tidak ada widget yang tersedia.</string>
+    <string name="widget_unavailable">Widget tidak tersedia</string>
+    <string name="menu_resize">Ubah ukuran</string>
+    <string name="menu_remove_widget">Hapus widget</string>
 
     <!-- Menu ikon -->
     <string name="menu_app_info">Info aplikasi</string>

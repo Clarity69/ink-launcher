@@ -1,5 +1,8 @@
 package com.taro.inklauncher
 
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProviderInfo
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,8 +12,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.taro.inklauncher.data.HomeItem
+import com.taro.inklauncher.data.ItemType
 import com.taro.inklauncher.ui.LauncherRoot
 
 /**
@@ -26,6 +32,15 @@ class MainActivity : ComponentActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let { vm.onBattery(it) }
         }
+    }
+
+    private val widgetHost get() = (application as InkApp).widgetHost
+
+    private data class PendingWidget(val id: Int, val info: AppWidgetProviderInfo, val spanX: Int, val spanY: Int)
+    private var pending: PendingWidget? = null
+
+    private val bindWidget = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        if (res.resultCode == RESULT_OK) configureOrFinish() else cancelPending()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +100,74 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Diisi tahap widget (AppWidgetHost start/stopListening). */
-    private fun onStartHooks() = Unit
-    private fun onStopHooks() = Unit
+    override fun onDestroy() {
+        widgetHost.clearViews()
+        super.onDestroy()
+    }
+
+    private fun onStartHooks() = widgetHost.startListening()
+    private fun onStopHooks() = widgetHost.stopListening()
+
+    // ---------- Alur tambah widget sistem ----------
+    // bindAppWidgetIdIfAllowed -> fallback ACTION_APPWIDGET_BIND -> activity konfigurasi (bila ada).
+
+    fun addWidget(info: AppWidgetProviderInfo, spanX: Int, spanY: Int) {
+        cancelPending()
+        val id = widgetHost.allocateId()
+        pending = PendingWidget(id, info, spanX, spanY)
+        if (widgetHost.bindIfAllowed(id, info)) {
+            configureOrFinish()
+        } else {
+            val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_BIND)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.provider)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER_PROFILE, info.profile)
+            try {
+                bindWidget.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                cancelPending()
+            }
+        }
+    }
+
+    private fun configureOrFinish() {
+        val p = pending ?: return
+        if (p.info.configure != null) {
+            try {
+                widgetHost.host.startAppWidgetConfigureActivityForResult(this, p.id, 0, REQUEST_CONFIGURE, null)
+            } catch (e: Exception) {
+                // Beberapa widget tetap berfungsi tanpa konfigurasi.
+                finishPending()
+            }
+        } else {
+            finishPending()
+        }
+    }
+
+    @Deprecated("Dipakai oleh AppWidgetHost.startAppWidgetConfigureActivityForResult")
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CONFIGURE) {
+            if (resultCode == RESULT_OK) finishPending() else cancelPending()
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun finishPending() {
+        val p = pending ?: return
+        pending = null
+        val ok = vm.addItemAtFreeSpot(HomeItem(type = ItemType.WIDGET, appWidgetId = p.id, w = p.spanX, h = p.spanY))
+        if (!ok) widgetHost.deleteId(p.id)
+        vm.goHome()
+    }
+
+    private fun cancelPending() {
+        pending?.let { widgetHost.deleteId(it.id) }
+        pending = null
+    }
+
+    companion object {
+        private const val REQUEST_CONFIGURE = 0x1C0
+    }
 }

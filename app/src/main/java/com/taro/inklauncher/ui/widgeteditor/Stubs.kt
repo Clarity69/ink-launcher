@@ -4,10 +4,6 @@ import androidx.compose.runtime.Composable
 import com.taro.inklauncher.LauncherViewModel
 
 @Composable
-fun WidgetPickerScreen(vm: LauncherViewModel) {
-}
-
-@Composable
 fun CustomWidgetsScreen(vm: LauncherViewModel) {
 }
 

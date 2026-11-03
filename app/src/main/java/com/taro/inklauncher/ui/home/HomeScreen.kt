@@ -91,6 +91,7 @@ fun HomeScreen(vm: LauncherViewModel) {
     val appMap by vm.appMap.collectAsStateWithLifecycle()
     val moving by vm.moving.collectAsStateWithLifecycle()
     val homeMenu by vm.homeMenu.collectAsStateWithLifecycle()
+    val resizing by vm.resizing.collectAsStateWithLifecycle()
     val pageCount = prefs.pageCount
     val pagerState = rememberPagerState(pageCount = { pageCount })
     val drag = remember { DragController() }
@@ -150,7 +151,7 @@ fun HomeScreen(vm: LauncherViewModel) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    userScrollEnabled = pageCount > 1 && drag.payload == null && moving == null,
+                    userScrollEnabled = pageCount > 1 && drag.payload == null && moving == null && resizing == null,
                     key = { it },
                 ) { page ->
                     Box(Modifier.fillMaxSize()) {
@@ -221,9 +222,14 @@ fun HomeScreen(vm: LauncherViewModel) {
             }
         }
 
-        if (moving != null) {
+        if (moving != null || resizing != null) {
             MoveHint(
-                onCancel = { vm.moving.value = null },
+                text = stringResource(if (moving != null) R.string.move_hint else R.string.resize_hint),
+                button = stringResource(if (moving != null) R.string.action_cancel else R.string.action_done),
+                onClick = {
+                    vm.moving.value = null
+                    vm.resizing.value = null
+                },
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .windowInsetsPadding(WindowInsets.systemBars)
@@ -264,7 +270,7 @@ fun HomeScreen(vm: LauncherViewModel) {
 }
 
 @Composable
-private fun MoveHint(onCancel: () -> Unit, modifier: Modifier = Modifier) {
+private fun MoveHint(text: String, button: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val ink = LocalInk.current
     Row(
         modifier
@@ -273,8 +279,8 @@ private fun MoveHint(onCancel: () -> Unit, modifier: Modifier = Modifier) {
             .padding(start = 16.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(stringResource(R.string.move_hint), color = ink.fg)
-        TextButton(onClick = onCancel) { Text(stringResource(R.string.action_cancel), color = ink.fg) }
+        Text(text, color = ink.fg)
+        TextButton(onClick = onClick) { Text(button, color = ink.fg) }
     }
 }
 

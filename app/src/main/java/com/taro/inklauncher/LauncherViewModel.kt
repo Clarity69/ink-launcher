@@ -63,6 +63,7 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
     val repo = ink.appRepository
     val iconProcessor = ink.iconProcessor
     val layoutStore = ink.layoutStore
+    val widgetHost = ink.widgetHost
     val prefsStore: Prefs = ink.prefs
     val prefs: StateFlow<LauncherPrefs> = ink.prefsState
     val layout: StateFlow<HomeLayout> = layoutStore.layout
@@ -220,8 +221,15 @@ class LauncherViewModel(application: Application) : AndroidViewModel(application
         layoutStore.update { l -> l.copy(items = l.items.filterNot { it.id == id }) }
     }
 
-    /** Dipanggil sebelum item dihapus (mis. untuk melepas AppWidget id). */
-    var onItemRemoved: (HomeItem) -> Unit = {}
+    /** Dipanggil sebelum item dihapus: lepaskan AppWidget id agar tidak bocor. */
+    private fun onItemRemoved(item: HomeItem) {
+        if (item.type == ItemType.WIDGET && item.appWidgetId != -1) widgetHost.deleteId(item.appWidgetId)
+    }
+
+    fun startResize(id: String) {
+        homeMenu.value = null
+        resizing.value = id
+    }
 
     fun removeFromDock(index: Int) {
         layoutStore.update { l ->
