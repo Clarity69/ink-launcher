@@ -172,6 +172,8 @@
     <string name="shape_squircle_outline">Squircle</string>
     <string name="settings_home">Home screen</string>
     <string name="settings_show_search">Show search bar</string>
+    <string name="settings_show_drawer_button">App drawer button in dock</string>
+    <string name="settings_show_drawer_button_sub">Off = open the drawer by swiping up</string>
     <string name="settings_show_glance">Show At a Glance</string>
     <string name="settings_glance_calendar">Next calendar event</string>
     <string name="settings_glance_calendar_sub">Requires calendar permission</string>

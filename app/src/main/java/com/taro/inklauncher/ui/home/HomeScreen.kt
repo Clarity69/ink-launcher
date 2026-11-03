@@ -441,21 +441,23 @@ fun Dock(
                 }
             }
         }
-        // Tombol laci aplikasi (alternatif dari swipe ke atas).
-        Box(
-            Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center,
-        ) {
+        // Tombol laci aplikasi (alternatif dari swipe ke atas), bisa disembunyikan di Settings.
+        if (prefs.showDrawerButton) {
             Box(
                 Modifier
-                    .size(prefs.iconSizeDp.dp)
-                    .clip(CircleShape)
-                    .clickable { vm.openDrawer() },
+                    .weight(1f)
+                    .fillMaxHeight(),
                 contentAlignment = Alignment.Center,
             ) {
-                MsIcon(R.drawable.ic_ms_apps, drawerLabel, size = (prefs.iconSizeDp * 0.6f).dp)
+                Box(
+                    Modifier
+                        .size(prefs.iconSizeDp.dp)
+                        .clip(CircleShape)
+                        .clickable { vm.openDrawer() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    MsIcon(R.drawable.ic_ms_apps, drawerLabel, size = (prefs.iconSizeDp * 0.6f).dp)
+                }
             }
         }
     }

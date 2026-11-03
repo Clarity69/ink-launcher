@@ -144,6 +144,9 @@ private fun AppearanceSettings(vm: LauncherViewModel) {
 
             SectionTitle(stringResource(R.string.settings_home))
             SwitchRow(stringResource(R.string.settings_show_search), null, prefs.showSearchBar) { vm.setPref(set, Prefs.Keys.SHOW_SEARCH, it) }
+            SwitchRow(stringResource(R.string.settings_show_drawer_button), stringResource(R.string.settings_show_drawer_button_sub), prefs.showDrawerButton) {
+                vm.setPref(set, Prefs.Keys.SHOW_DRAWER_BUTTON, it)
+            }
             SwitchRow(stringResource(R.string.settings_show_glance), null, prefs.showGlance) { vm.setPref(set, Prefs.Keys.SHOW_GLANCE, it) }
             SwitchRow(stringResource(R.string.settings_glance_calendar), stringResource(R.string.settings_glance_calendar_sub), prefs.glanceCalendar) { on ->
                 if (!on) {

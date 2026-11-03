@@ -26,6 +26,7 @@ data class LauncherPrefs(
     val iconSizeDp: Int = 44,
     val iconShape: IconShape = IconShape.NONE,
     val showSearchBar: Boolean = true,
+    val showDrawerButton: Boolean = true,
     val showGlance: Boolean = true,
     val glanceCalendar: Boolean = false,
     val glanceWeather: Boolean = false,
@@ -53,6 +54,7 @@ class Prefs(context: Context) {
         val ICON_SIZE = intPreferencesKey("icon_size_dp")
         val ICON_SHAPE = stringPreferencesKey("icon_shape")
         val SHOW_SEARCH = booleanPreferencesKey("show_search_bar")
+        val SHOW_DRAWER_BUTTON = booleanPreferencesKey("show_drawer_button")
         val SHOW_GLANCE = booleanPreferencesKey("show_glance")
         val GLANCE_CALENDAR = booleanPreferencesKey("glance_calendar")
         val GLANCE_WEATHER = booleanPreferencesKey("glance_weather")
@@ -78,6 +80,7 @@ class Prefs(context: Context) {
                 iconSizeDp = (p[Keys.ICON_SIZE] ?: d.iconSizeDp).coerceIn(32, 64),
                 iconShape = enumOr(p[Keys.ICON_SHAPE], d.iconShape),
                 showSearchBar = p[Keys.SHOW_SEARCH] ?: d.showSearchBar,
+                showDrawerButton = p[Keys.SHOW_DRAWER_BUTTON] ?: d.showDrawerButton,
                 showGlance = p[Keys.SHOW_GLANCE] ?: d.showGlance,
                 glanceCalendar = p[Keys.GLANCE_CALENDAR] ?: d.glanceCalendar,
                 glanceWeather = p[Keys.GLANCE_WEATHER] ?: d.glanceWeather,
@@ -116,6 +119,7 @@ class Prefs(context: Context) {
         Keys.ICON_SIZE.name to current.iconSizeDp.toString(),
         Keys.ICON_SHAPE.name to current.iconShape.name,
         Keys.SHOW_SEARCH.name to current.showSearchBar.toString(),
+        Keys.SHOW_DRAWER_BUTTON.name to current.showDrawerButton.toString(),
         Keys.SHOW_GLANCE.name to current.showGlance.toString(),
         Keys.PAGE_COUNT.name to current.pageCount.toString(),
         Keys.DOCK_COUNT.name to current.dockCount.toString(),
@@ -137,7 +141,7 @@ class Prefs(context: Context) {
                 map[k.name]?.let { v -> p[k] = v.split("\n").filter { it.isNotBlank() }.toSet() }
             }
             str(Keys.THEME); int(Keys.COLUMNS); int(Keys.ROWS); int(Keys.ICON_SIZE)
-            str(Keys.ICON_SHAPE); bool(Keys.SHOW_SEARCH); bool(Keys.SHOW_GLANCE)
+            str(Keys.ICON_SHAPE); bool(Keys.SHOW_SEARCH); bool(Keys.SHOW_DRAWER_BUTTON); bool(Keys.SHOW_GLANCE)
             int(Keys.PAGE_COUNT); int(Keys.DOCK_COUNT)
             str(Keys.FALLBACK_STYLE); strSet(Keys.FORCE_GRAYSCALE); strSet(Keys.HIDDEN_APPS)
             bool(Keys.GESTURE_UP); bool(Keys.GESTURE_DOWN); bool(Keys.GESTURE_DOUBLE_TAP)
