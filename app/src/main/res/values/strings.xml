@@ -1,256 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">InkLauncher</string>
-    <string name="settings_launcher_label">Pengaturan InkLauncher</string>
+    <string name="settings_launcher_label">InkLauncher Settings</string>
 
-    <!-- Umum -->
-    <string name="action_cancel">Batal</string>
-    <string name="action_clear">Hapus teks</string>
-    <string name="action_back">Kembali</string>
-    <string name="action_save">Simpan</string>
-    <string name="action_delete">Hapus</string>
+    <!-- Common -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear">Clear text</string>
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
     <string name="action_ok">OK</string>
-    <string name="action_copy">Salin</string>
-    <string name="action_add">Tambah</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_add">Add</string>
     <string name="action_edit">Edit</string>
-    <string name="action_duplicate">Duplikat</string>
-    <string name="action_export">Ekspor</string>
-    <string name="action_import">Impor</string>
-    <string name="action_open_settings">Buka pengaturan</string>
-    <string name="copied">Disalin ke papan klip</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="action_export">Export</string>
+    <string name="action_import">Import</string>
+    <string name="action_done">Done</string>
+    <string name="loading">Loading…</string>
 
-    <!-- Pesan -->
-    <string name="msg_added_home">Ditambahkan ke layar utama</string>
-    <string name="msg_home_full">Layar utama penuh</string>
-    <string name="msg_enable_lock_service">Aktifkan layanan aksesibilitas InkLauncher untuk mengunci layar dengan ketuk dua kali.</string>
-    <string name="move_hint">Ketuk tempat tujuan</string>
-    <string name="resize_hint">Seret pegangan untuk mengubah ukuran</string>
-    <string name="action_done">Selesai</string>
-    <string name="loading">Memuat…</string>
+    <!-- Messages -->
+    <string name="msg_added_home">Added to home screen</string>
+    <string name="msg_home_full">Home screen is full</string>
+    <string name="msg_enable_lock_service">Enable the InkLauncher accessibility service to lock the screen with a double tap.</string>
+    <string name="msg_permission_denied">Permission denied</string>
+    <string name="move_hint">Tap a destination</string>
+    <string name="resize_hint">Drag the handles to resize</string>
 
-    <!-- Widget -->
-    <string name="widget_picker_title">Widget</string>
-    <string name="widget_none">Tidak ada widget yang tersedia.</string>
-    <string name="widget_unavailable">Widget tidak tersedia</string>
-    <string name="menu_resize">Ubah ukuran</string>
-    <string name="menu_remove_widget">Hapus widget</string>
-
-    <!-- Menu ikon -->
-    <string name="menu_app_info">Info aplikasi</string>
+    <!-- App icon menu -->
+    <string name="menu_app_info">App info</string>
     <string name="menu_uninstall">Uninstall</string>
-    <string name="menu_remove_home">Hapus dari layar utama</string>
-    <string name="menu_move">Pindahkan</string>
-    <string name="menu_add_home">Tambah ke layar utama</string>
-    <string name="menu_hide">Sembunyikan</string>
+    <string name="menu_remove_home">Remove from home</string>
+    <string name="menu_move">Move</string>
+    <string name="menu_add_home">Add to home screen</string>
+    <string name="menu_hide">Hide</string>
 
-    <!-- Menu area kosong -->
+    <!-- Empty area menu -->
     <string name="menu_wallpaper">Wallpaper</string>
-    <string name="menu_widgets">Widget</string>
-    <string name="menu_custom_widgets">Widget kustom</string>
-    <string name="menu_launcher_settings">Pengaturan launcher</string>
+    <string name="menu_widgets">Widgets</string>
+    <string name="menu_custom_widgets">Custom widgets</string>
+    <string name="menu_launcher_settings">Launcher settings</string>
 
-    <!-- Pencarian & laci -->
-    <string name="cd_voice_search">Pencarian suara</string>
+    <!-- Search & drawer -->
+    <string name="cd_voice_search">Voice search</string>
     <string name="cd_lens">Google Lens</string>
-    <string name="cd_app_drawer">Laci aplikasi</string>
-    <string name="drawer_search_hint">Cari aplikasi</string>
+    <string name="cd_app_drawer">App drawer</string>
+    <string name="drawer_search_hint">Search apps</string>
 
-    <!-- Widget kustom -->
-    <string name="custom_widgets_title">Widget kustom</string>
-    <string name="custom_widgets_mine">Widget saya</string>
-    <string name="custom_widgets_empty">Belum ada widget kustom. Ketuk + untuk membuat, atau pakai salah satu preset di bawah.</string>
-    <string name="custom_widgets_presets">Preset (ketuk untuk menyalin)</string>
-    <string name="new_widget_name">Widget baru</string>
-    <string name="copy_suffix">(salinan)</string>
-    <string name="msg_exported">Widget diekspor</string>
-    <string name="msg_imported">Widget diimpor</string>
-    <string name="msg_invalid_file">File tidak valid</string>
-    <string name="msg_preset_added">Preset disalin ke Widget saya</string>
-    <string name="token_charging">mengisi</string>
+    <!-- System widgets -->
+    <string name="widget_picker_title">Widgets</string>
+    <string name="widget_none">No widgets available.</string>
+    <string name="widget_unavailable">Widget unavailable</string>
+    <string name="menu_resize">Resize</string>
+    <string name="menu_remove_widget">Remove widget</string>
 
-    <string name="editor_title">Editor widget</string>
-    <string name="editor_name">Nama widget</string>
-    <string name="editor_width_cells">Lebar (sel)</string>
-    <string name="editor_height_cells">Tinggi (sel)</string>
-    <string name="editor_layers">Layer</string>
-    <string name="editor_add_layer">Tambah layer</string>
-    <string name="editor_layer_up">Naikkan</string>
-    <string name="editor_layer_down">Turunkan</string>
-    <string name="editor_layer_name">Nama layer</string>
-    <string name="editor_position">Posisi &amp; ukuran</string>
-    <string name="editor_w">Lebar</string>
-    <string name="editor_h">Tinggi</string>
-    <string name="editor_align">Perataan</string>
-    <string name="editor_color">Warna</string>
-    <string name="editor_text">Teks (mendukung token)</string>
-    <string name="editor_font_size">Ukuran font</string>
-    <string name="editor_bold">Tebal</string>
-    <string name="editor_filled">Isi penuh</string>
-    <string name="editor_stroke">Ketebalan garis</string>
-    <string name="editor_corner">Sudut</string>
-    <string name="editor_24h">Format 24 jam</string>
-    <string name="editor_off_dots">Tampilkan titik mati</string>
-    <string name="editor_dots">Jumlah titik</string>
-    <string name="editor_action">Aksi saat diketuk</string>
-    <string name="editor_pick_app">Pilih aplikasi</string>
-    <string name="editor_no_app">Belum dipilih</string>
+    <!-- Custom widgets -->
+    <string name="custom_widgets_title">Custom widgets</string>
+    <string name="custom_widgets_mine">My widgets</string>
+    <string name="custom_widgets_empty">No custom widgets yet. Tap + to create one, or use one of the presets below.</string>
+    <string name="custom_widgets_presets">Presets (tap to copy)</string>
+    <string name="new_widget_name">New widget</string>
+    <string name="copy_suffix">(copy)</string>
+    <string name="msg_exported">Widget exported</string>
+    <string name="msg_imported">Widget imported</string>
+    <string name="msg_invalid_file">Invalid file</string>
+    <string name="msg_preset_added">Preset copied to My widgets</string>
+    <string name="token_charging">charging</string>
 
-    <string name="layer_text">Teks</string>
-    <string name="layer_box">Kotak</string>
-    <string name="layer_icon">Ikon</string>
-    <string name="layer_dot_clock">Jam dot-matrix</string>
-    <string name="layer_divider">Garis pemisah</string>
-    <string name="layer_dot_progress">Progres titik</string>
+    <string name="preset_dot_clock">Dot clock + date</string>
+    <string name="preset_search_lens">Search G + Lens</string>
+    <string name="preset_serif_clock">Serif clock + battery</string>
+    <string name="layer_name_clock">Clock</string>
+    <string name="layer_name_date">Date</string>
+    <string name="layer_name_capsule">Capsule</string>
+    <string name="layer_name_lens">Lens</string>
+    <string name="layer_name_battery">Battery</string>
+    <string name="layer_name_percent">Percent</string>
 
-    <string name="align_start">Kiri</string>
-    <string name="align_center">Tengah</string>
-    <string name="align_end">Kanan</string>
+    <string name="editor_title">Widget editor</string>
+    <string name="editor_name">Widget name</string>
+    <string name="editor_width_cells">Width (cells)</string>
+    <string name="editor_height_cells">Height (cells)</string>
+    <string name="editor_layers">Layers</string>
+    <string name="editor_add_layer">Add layer</string>
+    <string name="editor_layer_up">Move up</string>
+    <string name="editor_layer_down">Move down</string>
+    <string name="editor_layer_name">Layer name</string>
+    <string name="editor_position">Position &amp; size</string>
+    <string name="editor_w">Width</string>
+    <string name="editor_h">Height</string>
+    <string name="editor_align">Alignment</string>
+    <string name="editor_color">Color</string>
+    <string name="editor_text">Text (supports tokens)</string>
+    <string name="editor_font_size">Font size</string>
+    <string name="editor_bold">Bold</string>
+    <string name="editor_filled">Filled</string>
+    <string name="editor_stroke">Stroke width</string>
+    <string name="editor_corner">Corner radius</string>
+    <string name="editor_24h">24-hour format</string>
+    <string name="editor_off_dots">Show unlit dots</string>
+    <string name="editor_dots">Dot count</string>
+    <string name="editor_action">Tap action</string>
+    <string name="editor_pick_app">Choose app</string>
+    <string name="editor_no_app">Not selected</string>
+    <string name="unit_percent" formatted="false">%</string>
+    <string name="unit_dp">dp</string>
+    <string name="font_sans">Sans</string>
+    <string name="font_serif">Serif</string>
+    <string name="font_mono">Mono</string>
+
+    <string name="layer_text">Text</string>
+    <string name="layer_box">Box</string>
+    <string name="layer_icon">Icon</string>
+    <string name="layer_dot_clock">Dot-matrix clock</string>
+    <string name="layer_divider">Divider</string>
+    <string name="layer_dot_progress">Dot progress</string>
+
+    <string name="align_start">Left</string>
+    <string name="align_center">Center</string>
+    <string name="align_end">Right</string>
     <string name="color_ink">Ink</string>
     <string name="color_paper">Paper</string>
     <string name="color_muted">Muted</string>
-    <string name="color_transparent">Transparan</string>
-    <string name="shape_rect">Persegi</string>
-    <string name="shape_capsule">Kapsul</string>
-    <string name="shape_circle">Lingkaran</string>
-    <string name="progress_battery">Baterai</string>
-    <string name="progress_day">Hari</string>
-    <string name="progress_year">Tahun</string>
+    <string name="color_transparent">Transparent</string>
+    <string name="shape_rect">Rectangle</string>
+    <string name="shape_capsule">Capsule</string>
+    <string name="shape_circle">Circle</string>
+    <string name="progress_battery">Battery</string>
+    <string name="progress_day">Day</string>
+    <string name="progress_year">Year</string>
 
-    <string name="action_none">Tidak ada</string>
-    <string name="action_open_app">Buka aplikasi</string>
+    <string name="action_none">None</string>
+    <string name="action_open_app">Open app</string>
     <string name="action_google_search">Google Search</string>
     <string name="action_google_lens">Google Lens</string>
-    <string name="action_clock">Jam</string>
-    <string name="action_calendar">Kalender</string>
+    <string name="action_clock">Clock</string>
+    <string name="action_calendar">Calendar</string>
 
-    <!-- Pengaturan -->
-    <string name="settings_title">Pengaturan</string>
-    <string name="settings_make_default">Jadikan launcher default</string>
-    <string name="settings_make_default_sub">Buka pengaturan aplikasi layar utama</string>
-    <string name="settings_appearance">Tampilan</string>
-    <string name="settings_appearance_sub">Tema, grid, ukuran &amp; bentuk ikon, At a Glance</string>
-    <string name="settings_icons">Ikon</string>
-    <string name="settings_icons_sub">Gaya fallback, sumber ikon, refresh cache</string>
-    <string name="settings_gestures">Gestur</string>
-    <string name="settings_gestures_sub">Swipe atas/bawah, ketuk dua kali</string>
-    <string name="settings_hidden">Aplikasi tersembunyi</string>
-    <string name="settings_hidden_sub">Tampilkan kembali aplikasi yang disembunyikan</string>
-    <string name="settings_custom_widgets_sub">Buat, edit, impor &amp; ekspor widget</string>
-    <string name="settings_backup">Cadangkan &amp; pulihkan</string>
-    <string name="settings_backup_sub">Tata letak, widget kustom, dan pengaturan ke file JSON</string>
-    <string name="settings_about">Tentang</string>
-    <string name="msg_permission_denied">Izin ditolak</string>
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_make_default">Set as default launcher</string>
+    <string name="settings_make_default_sub">Open the default home app settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_appearance_sub">Theme, grid, icon size &amp; shape, At a Glance</string>
+    <string name="settings_icons">Icons</string>
+    <string name="settings_icons_sub">Fallback style, icon sources, refresh cache</string>
+    <string name="settings_gestures">Gestures</string>
+    <string name="settings_gestures_sub">Swipe up/down, double tap</string>
+    <string name="settings_hidden">Hidden apps</string>
+    <string name="settings_hidden_sub">Show hidden apps again</string>
+    <string name="settings_custom_widgets_sub">Create, edit, import &amp; export widgets</string>
+    <string name="settings_backup">Backup &amp; restore</string>
+    <string name="settings_backup_sub">Layout, custom widgets and settings to a JSON file</string>
+    <string name="settings_about">About</string>
 
-    <string name="settings_theme">Tema</string>
-    <string name="theme_light">Terang</string>
-    <string name="theme_dark">Gelap</string>
-    <string name="theme_auto">Otomatis</string>
-    <string name="settings_show_wallpaper">Tampilkan wallpaper sistem</string>
-    <string name="settings_show_wallpaper_sub">Mati = latar kertas polos ala e-ink</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_auto">Auto</string>
+    <string name="settings_show_wallpaper">Show system wallpaper</string>
+    <string name="settings_show_wallpaper_sub">Off = plain e-ink paper background</string>
     <string name="settings_grid">Grid</string>
-    <string name="settings_columns">Kolom</string>
-    <string name="settings_rows">Baris</string>
-    <string name="settings_pages">Jumlah halaman</string>
-    <string name="settings_dock_count">Ikon di dock</string>
-    <string name="settings_icon_look">Ikon</string>
-    <string name="settings_icon_size">Ukuran ikon</string>
-    <string name="shape_none">Tanpa latar</string>
-    <string name="shape_circle_outline">Lingkaran</string>
+    <string name="settings_columns">Columns</string>
+    <string name="settings_rows">Rows</string>
+    <string name="settings_pages">Pages</string>
+    <string name="settings_dock_count">Dock icons</string>
+    <string name="settings_icon_look">Icons</string>
+    <string name="settings_icon_size">Icon size</string>
+    <string name="shape_none">No background</string>
+    <string name="shape_circle_outline">Circle</string>
     <string name="shape_squircle_outline">Squircle</string>
-    <string name="settings_home">Layar utama</string>
-    <string name="settings_show_search">Tampilkan bilah pencarian</string>
-    <string name="settings_show_glance">Tampilkan At a Glance</string>
-    <string name="settings_glance_calendar">Acara kalender terdekat</string>
-    <string name="settings_glance_calendar_sub">Butuh izin kalender</string>
-    <string name="settings_glance_weather">Cuaca (Open-Meteo)</string>
-    <string name="settings_glance_weather_sub">Butuh izin lokasi perkiraan &amp; internet, diperbarui tiap 30 menit</string>
+    <string name="settings_home">Home screen</string>
+    <string name="settings_show_search">Show search bar</string>
+    <string name="settings_show_glance">Show At a Glance</string>
+    <string name="settings_glance_calendar">Next calendar event</string>
+    <string name="settings_glance_calendar_sub">Requires calendar permission</string>
+    <string name="settings_glance_weather">Weather (Open-Meteo)</string>
+    <string name="settings_glance_weather_sub">Requires approximate location &amp; internet, refreshed every 30 minutes</string>
 
-    <string name="gestures_note">Gestur launcher hanya dibaca di area tengah layar, jadi gestur back (tepi kiri/kanan) dan home (bawah) dari sistem tidak terganggu.</string>
-    <string name="gesture_swipe_up">Swipe ke atas: buka laci aplikasi</string>
-    <string name="gesture_swipe_down">Swipe ke bawah: buka notifikasi</string>
-    <string name="gesture_double_tap">Ketuk dua kali: kunci layar</string>
-    <string name="gesture_double_tap_sub">Butuh layanan aksesibilitas InkLauncher</string>
-    <string name="gesture_a11y">Layanan aksesibilitas</string>
-    <string name="gesture_a11y_on">Aktif</string>
-    <string name="gesture_a11y_off">Belum aktif – ketuk untuk membuka pengaturan</string>
+    <string name="gestures_note">Launcher gestures are read inside the home screen area only. Each gesture can be turned off.</string>
+    <string name="gesture_swipe_up">Swipe up: open app drawer</string>
+    <string name="gesture_swipe_down">Swipe down: open notifications</string>
+    <string name="gesture_double_tap">Double tap: lock screen</string>
+    <string name="gesture_double_tap_sub">Requires the InkLauncher accessibility service</string>
+    <string name="gesture_a11y">Accessibility service</string>
+    <string name="gesture_a11y_on">Enabled</string>
+    <string name="gesture_a11y_off">Not enabled – tap to open settings</string>
 
-    <string name="settings_fallback_style">Gaya fallback</string>
+    <string name="settings_fallback_style">Fallback style</string>
     <string name="fallback_material">Material</string>
     <string name="fallback_grayscale">Grayscale</string>
-    <string name="settings_refresh_icons">Refresh cache ikon</string>
-    <string name="settings_refresh_icons_sub">Proses ulang semua ikon</string>
-    <string name="msg_icons_refreshed">Cache ikon dibersihkan</string>
-    <string name="settings_icon_sources">Aplikasi &amp; sumber ikon</string>
-    <string name="settings_icon_sources_sub">Aktifkan sakelar untuk memaksa ikon grayscale pada aplikasi tertentu.</string>
+    <string name="settings_refresh_icons">Refresh icon cache</string>
+    <string name="settings_refresh_icons_sub">Clear the cache and process every icon again</string>
+    <string name="msg_icons_refreshed">Icon cache cleared</string>
+    <string name="settings_icon_sources">Apps &amp; icon sources</string>
+    <string name="settings_icon_sources_sub">Turn on the switch to force a grayscale icon for an app.</string>
     <string name="icon_source_themed">Themed icon (Android 13+)</string>
     <string name="icon_source_material">Fallback: Material Symbols</string>
     <string name="icon_source_grayscale">Fallback: grayscale</string>
-    <string name="icon_source_letter">Fallback: huruf awal</string>
+    <string name="icon_source_letter">Fallback: first letter</string>
 
-    <!-- Perbaiki gestur MIUI -->
-    <string name="miui_fix_title">Perbaiki gestur MIUI</string>
-    <string name="miui_fix_sub">Jika gestur layar penuh berubah jadi tombol</string>
-    <string name="miui_fix_problem_title">Masalahnya</string>
-    <string name="miui_fix_problem">Di beberapa versi MIUI, gestur layar penuh otomatis dimatikan (atau kembali ke tombol navigasi) ketika launcher pihak ketiga seperti InkLauncher dijadikan default. Perbaikannya adalah mengubah satu pengaturan sistem: force_fsg_nav_bar = 1, yang memaksa MIUI tetap memakai gestur layar penuh.</string>
-    <string name="miui_fix_disclaimer">Catatan: ini bergantung pada versi MIUI dan bukan jaminan. Animasi recents mungkin tetap memakai animasi sistem.</string>
-    <string name="miui_fix_status">Status</string>
-    <string name="miui_fix_current_value">Nilai force_fsg_nav_bar</string>
-    <string name="miui_fix_value_unknown">Tidak bisa dibaca (butuh Shizuku)</string>
-    <string name="miui_fix_value_on">1 – gestur layar penuh dipaksa aktif</string>
-    <string name="miui_fix_value_off">%1$s – tidak dipaksa</string>
-    <string name="shizuku_not_installed">Tidak terpasang</string>
-    <string name="shizuku_not_running">Terpasang, tapi belum berjalan</string>
-    <string name="shizuku_no_permission">Berjalan, izin belum diberikan</string>
-    <string name="shizuku_ready">Siap</string>
-    <string name="miui_fix_with_shizuku">Cara 1: lewat Shizuku</string>
-    <string name="shizuku_grant">Izinkan Shizuku</string>
-    <string name="miui_fix_enable">Aktifkan (1)</string>
-    <string name="miui_fix_restore">Kembalikan (0)</string>
-    <string name="shizuku_get">Dapatkan Shizuku</string>
-    <string name="miui_fix_applied">Berhasil diterapkan</string>
-    <string name="miui_fix_failed">Gagal:</string>
-    <string name="miui_fix_with_adb">Cara 2: lewat ADB dari komputer</string>
-    <string name="miui_fix_adb_steps">1. Aktifkan Opsi pengembang (Setelan → Tentang ponsel → ketuk Versi MIUI 7 kali).
-2. Di Setelan tambahan → Opsi pengembang, aktifkan Debugging USB (dan Debugging USB (Setelan keamanan) bila ada).
-3. Sambungkan HP ke komputer yang sudah terpasang platform-tools (adb), izinkan sidik jari RSA di HP.
-4. Jalankan perintah di bawah di terminal komputer:</string>
-    <string name="miui_fix_after">Setelah itu, buka Setelan → Layar beranda / Sistem navigasi dan pilih Gestur layar penuh bila belum. Untuk mengembalikan, jalankan perintah dengan nilai 0.</string>
+    <!-- Hidden apps -->
+    <string name="hidden_empty">No hidden apps. Long-press an icon in the drawer and choose Hide.</string>
+    <string name="hidden_show">Show</string>
 
-    <!-- Aplikasi tersembunyi -->
-    <string name="hidden_empty">Tidak ada aplikasi tersembunyi. Tahan ikon di laci lalu pilih Sembunyikan.</string>
-    <string name="hidden_show">Tampilkan</string>
+    <!-- Backup -->
+    <string name="backup_note">A backup contains the home screen layout, dock, custom widgets and settings. System widgets from other apps are not included and must be added again.</string>
+    <string name="backup_create">Back up to file</string>
+    <string name="backup_create_sub">Save as JSON</string>
+    <string name="backup_restore">Restore from file</string>
+    <string name="backup_restore_sub">Replaces the current layout &amp; custom widgets</string>
+    <string name="msg_backup_done">Backup saved</string>
+    <string name="msg_restore_done">Backup restored</string>
 
-    <!-- Cadangan -->
-    <string name="backup_note">Cadangan berisi tata letak layar utama, dock, widget kustom, dan pengaturan. Widget sistem dari aplikasi lain tidak ikut dan perlu ditambahkan ulang.</string>
-    <string name="backup_create">Cadangkan ke file</string>
-    <string name="backup_create_sub">Simpan sebagai JSON</string>
-    <string name="backup_restore">Pulihkan dari file</string>
-    <string name="backup_restore_sub">Menimpa tata letak &amp; widget kustom saat ini</string>
-    <string name="msg_backup_done">Cadangan disimpan</string>
-    <string name="msg_restore_done">Cadangan dipulihkan</string>
+    <!-- About -->
+    <string name="about_version">Version %1$s (%2$d)</string>
+    <string name="about_author">Made by Taro.</string>
+    <string name="about_license_title">License</string>
+    <string name="about_license">InkLauncher is free software licensed under the GNU General Public License v3.0 (GPL-3.0).</string>
+    <string name="about_attribution_title">Attribution</string>
+    <string name="about_attr_lawnchair">Some approaches (themed icons, Search/Lens intents, notification gesture, widget flow) are adapted from Lawnchair Launcher (GPL-3.0).</string>
+    <string name="about_attr_symbols">Icons: Material Symbols Outlined by Google (Apache License 2.0).</string>
+    <string name="about_attr_fonts">Fonts: Figtree and Instrument Serif (SIL Open Font License 1.1).</string>
+    <string name="about_link_github">Source code on GitHub</string>
+    <string name="about_link_lawnchair">Lawnchair</string>
+    <string name="about_link_license">GPL-3.0 license text</string>
 
-    <!-- Tentang -->
-    <string name="about_version">Versi %1$s (%2$d)</string>
-    <string name="about_author">Dibuat oleh Taro.</string>
-    <string name="about_license_title">Lisensi</string>
-    <string name="about_license">InkLauncher adalah perangkat lunak bebas di bawah GNU General Public License v3.0 (GPL-3.0).</string>
-    <string name="about_attribution_title">Atribusi</string>
-    <string name="about_attr_lawnchair">Sebagian pendekatan (themed icon, intent Search/Lens, gestur notifikasi, alur widget) diadaptasi dari Lawnchair Launcher (GPL-3.0).</string>
-    <string name="about_attr_symbols">Ikon: Material Symbols Outlined oleh Google (Apache License 2.0).</string>
-    <string name="about_attr_fonts">Font: Figtree dan Instrument Serif (SIL Open Font License 1.1).</string>
+    <!-- Weather -->
+    <string name="weather_clear">Clear</string>
+    <string name="weather_partly_cloudy">Partly cloudy</string>
+    <string name="weather_cloudy">Cloudy</string>
+    <string name="weather_fog">Fog</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_showers">Showers</string>
+    <string name="weather_thunder">Thunderstorm</string>
 
-    <!-- Cuaca -->
-    <string name="weather_clear">Cerah</string>
-    <string name="weather_partly_cloudy">Cerah berawan</string>
-    <string name="weather_cloudy">Berawan</string>
-    <string name="weather_fog">Berkabut</string>
-    <string name="weather_drizzle">Gerimis</string>
-    <string name="weather_rain">Hujan</string>
-    <string name="weather_snow">Salju</string>
-    <string name="weather_showers">Hujan lokal</string>
-    <string name="weather_thunder">Badai petir</string>
-
-    <!-- Aksesibilitas -->
-    <string name="a11y_label">InkLauncher – kunci layar</string>
-    <string name="a11y_description">Dipakai hanya untuk mengunci layar saat Anda mengetuk dua kali area kosong layar utama. Layanan ini tidak membaca isi layar.</string>
+    <!-- Accessibility -->
+    <string name="a11y_label">InkLauncher – lock screen</string>
+    <string name="a11y_description">Used only to lock the screen when you double-tap an empty area of the home screen. This service does not read any screen content.</string>
 </resources>

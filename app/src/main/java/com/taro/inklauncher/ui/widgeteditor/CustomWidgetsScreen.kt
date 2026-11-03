@@ -116,7 +116,7 @@ fun CustomWidgetsScreen(vm: LauncherViewModel) {
     val widgets by store.widgets.collectAsStateWithLifecycle()
     val tokens = rememberTokenContext(vm)
     val scope = rememberCoroutineScope()
-    val presets = remember { Presets.all() }
+    val presets = remember { Presets.all(context) }
     var exporting by remember { mutableStateOf<CustomWidget?>(null) }
 
     val msgExported = stringResource(R.string.msg_exported)
@@ -125,6 +125,8 @@ fun CustomWidgetsScreen(vm: LauncherViewModel) {
     val msgPresetAdded = stringResource(R.string.msg_preset_added)
     val copySuffix = stringResource(R.string.copy_suffix)
     val newName = stringResource(R.string.new_widget_name)
+    val clockName = stringResource(R.string.layer_name_clock)
+    val dateName = stringResource(R.string.layer_name_date)
 
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/octet-stream"),
@@ -165,8 +167,8 @@ fun CustomWidgetsScreen(vm: LauncherViewModel) {
                 val w = CustomWidget(
                     name = newName,
                     layers = listOf(
-                        Layer(type = LayerType.TEXT, name = "Jam", text = "{time}", x = 5f, y = 10f, w = 90f, h = 50f, fontSize = 40f, align = HAlign.CENTER),
-                        Layer(type = LayerType.TEXT, name = "Tanggal", text = "{day}, {date}", x = 5f, y = 65f, w = 90f, h = 25f, fontSize = 16f, align = HAlign.CENTER),
+                        Layer(type = LayerType.TEXT, name = clockName, text = "{time}", x = 5f, y = 10f, w = 90f, h = 50f, fontSize = 40f, align = HAlign.CENTER),
+                        Layer(type = LayerType.TEXT, name = dateName, text = "{day}, {date}", x = 5f, y = 65f, w = 90f, h = 25f, fontSize = 16f, align = HAlign.CENTER),
                     ),
                 )
                 store.save(w)

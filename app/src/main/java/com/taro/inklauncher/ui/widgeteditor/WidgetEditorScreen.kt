@@ -273,15 +273,15 @@ private fun LayerRow(
 @Composable
 private fun LayerProperties(vm: LauncherViewModel, l: Layer, update: (Layer) -> Unit) {
     val maxPos = if (l.unit == PosUnit.PERCENT) 100f else 400f
-    val unitSuffix = if (l.unit == PosUnit.PERCENT) "%" else "dp"
+    val unitSuffix = stringResource(if (l.unit == PosUnit.PERCENT) R.string.unit_percent else R.string.unit_dp)
     fun fmt(v: Float) = "${v.toInt()}$unitSuffix"
 
     InkTextField(value = l.name, onChange = { update(l.copy(name = it)) }, label = stringResource(R.string.editor_layer_name))
 
     SectionTitle(stringResource(R.string.editor_position))
     ChipRow {
-        InkChip("%", l.unit == PosUnit.PERCENT) { update(l.copy(unit = PosUnit.PERCENT, x = l.x.coerceIn(0f, 100f), y = l.y.coerceIn(0f, 100f), w = l.w.coerceIn(1f, 100f), h = l.h.coerceIn(1f, 100f))) }
-        InkChip("dp", l.unit == PosUnit.DP) { update(l.copy(unit = PosUnit.DP)) }
+        InkChip(stringResource(R.string.unit_percent), l.unit == PosUnit.PERCENT) { update(l.copy(unit = PosUnit.PERCENT, x = l.x.coerceIn(0f, 100f), y = l.y.coerceIn(0f, 100f), w = l.w.coerceIn(1f, 100f), h = l.h.coerceIn(1f, 100f))) }
+        InkChip(stringResource(R.string.unit_dp), l.unit == PosUnit.DP) { update(l.copy(unit = PosUnit.DP)) }
     }
     LabeledSlider("X", l.x, 0f..maxPos, { update(l.copy(x = it)) }, ::fmt)
     LabeledSlider("Y", l.y, 0f..maxPos, { update(l.copy(y = it)) }, ::fmt)
@@ -316,9 +316,9 @@ private fun LayerProperties(vm: LauncherViewModel, l: Layer, update: (Layer) -> 
             }
             LabeledSlider(stringResource(R.string.editor_font_size), l.fontSize, 8f..120f, { update(l.copy(fontSize = it)) })
             ChipRow {
-                InkChip("Sans", l.font == FontKind.SANS) { update(l.copy(font = FontKind.SANS)) }
-                InkChip("Serif", l.font == FontKind.SERIF) { update(l.copy(font = FontKind.SERIF)) }
-                InkChip("Mono", l.font == FontKind.MONO) { update(l.copy(font = FontKind.MONO)) }
+                InkChip(stringResource(R.string.font_sans), l.font == FontKind.SANS) { update(l.copy(font = FontKind.SANS)) }
+                InkChip(stringResource(R.string.font_serif), l.font == FontKind.SERIF) { update(l.copy(font = FontKind.SERIF)) }
+                InkChip(stringResource(R.string.font_mono), l.font == FontKind.MONO) { update(l.copy(font = FontKind.MONO)) }
             }
             SwitchRow(stringResource(R.string.editor_bold), checked = l.bold, onChange = { update(l.copy(bold = it)) })
         }

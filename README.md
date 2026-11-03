@@ -1,127 +1,151 @@
 # InkLauncher
 
-Launcher Android ringan bergaya **Google Pixel** dengan tema **e-ink monokrom**: kertas (#F4F1EA), tinta (#111111), dan abu-abu (#5A5A5A). Tanpa warna lain, tanpa bayangan, tanpa blur.
+A lightweight Android launcher with a **Google Pixel** layout and a **monochrome e-ink** theme: paper (#F4F1EA), ink (#111111) and grey (#5A5A5A). No other colors, no shadows, no blur.
 
-Package: `com.taro.inklauncher` · minSdk 26 · targetSdk 35 · Kotlin + Jetpack Compose · Lisensi **GPL-3.0**
+Package: `com.taro.inklauncher` · minSdk 26 · targetSdk 35 · Kotlin + Jetpack Compose · License **GPL-3.0**
 
-> Dirancang untuk Redmi 10 2022 (MIUI 14, Android 13) dan HP dengan RAM terbatas. APK debug ± 9 MB.
+> Built for the Redmi 10 2022 (MIUI 14, Android 13) and other phones with limited RAM. For daily use, install the **release** APK: Compose debug builds are much slower.
 
 ---
 
-## Fitur
+## Features
 
-- **Tata letak ala Pixel**
-  - *At a Glance* versi e-ink: tanggal besar ("Rabu, 4 Nov") plus satu baris acara kalender terdekat atau cuaca (Open-Meteo, tanpa API key). Kalender dan cuaca **default mati**, jadi tidak perlu izin atau internet.
-  - Grid ikon favorit (default 4×5, bisa diatur), **tanpa label**.
-  - Dock berisi 4–5 ikon dan bilah pencarian kapsul "G" dengan ikon mic dan Lens.
-  - Bisa beberapa halaman yang digeser kiri/kanan (default 1).
-- **Ikon Material monokrom** tanpa label. Sumber ikon dicoba berurutan:
-  1. Themed icon resmi Android 13+ (`AdaptiveIconDrawable.getMonochrome()`).
-  2. Peta package → ikon **Material Symbols Outlined** (telepon, pesan, kamera, galeri, dll.). Tidak memakai logo merek.
-  3. Fallback grayscale: kontras dinaikkan, di-threshold, lalu diambil tepinya supaya terlihat seperti ikon garis.
+- **Pixel-style layout**
+  - E-ink *At a Glance*: a large date ("Wednesday, Nov 4") plus one line for the next calendar event or the weather (Open-Meteo, no API key). Calendar and weather are **off by default**, so no permissions or internet are needed.
+  - Grid of favorite icons (4×5 by default, configurable), **no labels**.
+  - Dock with 4–5 icons and an app drawer button, then a capsule search bar with "G", mic and Lens.
+  - Optional extra pages you swipe left/right (1 page by default).
+- **Monochrome Material-style icons** without labels. Icon sources, in order:
+  1. Official Android 13+ themed icon (`AdaptiveIconDrawable.getMonochrome()`).
+  2. Package → **Material Symbols Outlined** map (phone, messages, camera, gallery, and so on). No brand logos.
+  3. Grayscale fallback of the full icon (background + foreground + mask) with gentle contrast. The result is validated; if it is empty or flat, it falls back to the original icon in grayscale, then a Material Symbol, then the app's first letter in an outline circle.
 
-  Bentuk latar ikon bisa dipilih: tanpa latar, lingkaran outline, atau squircle outline.
-- **Laci aplikasi**: swipe ke atas untuk membuka. Ada bilah cari di atas, nama aplikasi hanya muncul saat mencari, dan daftar diperbarui otomatis saat aplikasi di-install/uninstall.
-- **Long-press ikon**:
-  - Shortcut aplikasi
-  - Info aplikasi
+  Icon background shape can be set to none, outline circle, or outline squircle.
+- **App drawer**:
+  - Opens with a swipe up or the dock button and follows your finger, with a short spring when you release.
+  - Search bar at the top. The keyboard appears only when you tap it.
+  - App names are shown only while searching.
+  - Updates automatically when apps are installed or uninstalled.
+- **Long-press an icon**:
+  - App shortcuts
+  - App info
   - Uninstall
-  - Hapus dari layar utama
-  - Pindahkan (tahan lalu geser, atau pilih *Pindahkan* lalu ketuk tujuan, termasuk dock)
-- **Long-press area kosong**: Wallpaper, Widget, Widget kustom, Pengaturan launcher.
-- **Widget sistem** (termasuk InkWidgets):
-  - Pemilih widget dikelompokkan per aplikasi, lengkap dengan preview.
-  - Alur bind dan konfigurasi.
-  - Resize dengan pegangan (snap ke grid) dan hapus.
-- **Editor widget kustom** (mirip KWGT, tapi ringan): lihat bagian di bawah.
-- **Gestur launcher** (masing-masing bisa dimatikan): swipe ke atas atau tombol laci di dock membuka laci aplikasi, swipe ke bawah membuka notifikasi, ketuk dua kali mengunci layar (opsional, lewat layanan aksesibilitas).
-- **Cadangkan & pulihkan** tata letak, widget kustom, dan pengaturan ke file JSON.
+  - Remove from home
+  - Move (hold and drag, or choose *Move* and tap a destination, including the dock)
+- **Long-press an empty area**: Wallpaper, Widgets, Custom widgets, Launcher settings.
+- **System widgets** (including InkWidgets):
+  - Widget picker grouped by app, with previews.
+  - Bind and configure flow.
+  - Resize with handles that snap to the grid, and remove.
+- **Custom widget editor** (similar to KWGT, but lightweight): see below.
+- **Launcher gestures**, each one can be turned off in Settings:
+  - Swipe up: app drawer.
+  - Swipe down: notifications.
+  - Double tap: lock screen (through an optional accessibility service).
+- **Backup & restore** of the layout, custom widgets and settings to a JSON file.
 
-## Screenshot
+## Screenshots
 
-| Layar utama | Laci | Editor widget |
+| Home | Drawer | Widget editor |
 |---|---|---|
 | _(placeholder)_ | _(placeholder)_ | _(placeholder)_ |
 
-## Download APK
+## Download the APK
 
-APK dibuat otomatis oleh GitHub Actions setiap kali ada push ke `main`.
+APKs are built by GitHub Actions on every push to `main`.
 
-1. Buka tab **[Actions](https://github.com/Clarity69/ink-launcher/actions)** di repo ini.
-2. Pilih run **Build APK** teratas yang berstatus hijau (✓).
-3. Di bagian **Artifacts**, unduh **InkLauncher-apk**. Anda perlu login GitHub.
-4. Ekstrak file zip; isinya `app-debug.apk`.
+1. Open the **[Actions](https://github.com/Clarity69/ink-launcher/actions)** tab of this repo.
+2. Open the most recent green (✓) **Build APK** run.
+3. Under **Artifacts**, download:
+   - **InkLauncher-release**: signed release APK (recommended), or
+   - **InkLauncher-apk**: debug APK, built only when signing secrets are not set up.
 
-Build manual: tab Actions → **Build APK** → **Run workflow**.
+   You need to be signed in to GitHub.
+4. Unzip the downloaded file to get the APK.
 
-## Cara install
+To start a build manually: Actions tab → **Build APK** → **Run workflow**.
 
-1. Pindahkan `app-debug.apk` ke HP, lalu buka dari File Manager.
-2. Izinkan *Instal aplikasi tidak dikenal* untuk File Manager bila diminta.
-3. Di MIUI, jika muncul peringatan keamanan, pilih **Tetap instal**.
+## Install
 
-## Menjadikan launcher default di MIUI
+1. Copy the APK to your phone (for example with LocalSend) and open it from a file manager.
+2. Allow *Install unknown apps* for that file manager when asked.
+3. If Play Protect warns you, tap **More details → Install anyway**.
+4. On MIUI, if a security warning appears, choose **Install anyway**.
 
-**Setelan → Aplikasi → Kelola aplikasi → (⋮) Aplikasi default → Layar utama → InkLauncher**
+> **Switching from the debug build to the release build:** the signatures differ, so Android will not install the release APK over the debug one. Before switching:
+> 1. Make a backup in **Settings → Backup & restore**.
+> 2. Uninstall the debug build once.
+> 3. Install the release APK.
+> 4. Restore the backup.
 
-Cara lain: buka ikon **Pengaturan InkLauncher** di launcher lama → **Jadikan launcher default**.
+## Set as default launcher on MIUI
 
-## Widget kustom
+**Settings → Apps → Manage apps → (⋮) Default apps → Home screen → InkLauncher**
 
-Widget kustom dirender langsung oleh InkLauncher dengan Compose, bukan sebagai AppWidget, sehingga ringan dan selalu monokrom.
+You can also open the **InkLauncher Settings** icon from your old launcher and tap **Set as default launcher**.
 
-**Membuat widget:**
+## Custom widgets
 
-1. Tahan area kosong → **Widget kustom** → **+**.
-2. Atur ukuran widget dalam sel grid (misalnya 4×2). Pratinjau langsung tampil di atas.
-3. Tambahkan layer:
-   - **Teks**
-   - **Kotak**: persegi/kapsul/lingkaran, isi atau outline
-   - **Ikon** Material Symbols
-   - **Jam dot-matrix** (5×7, 24/12 jam)
-   - **Garis pemisah**
-   - **Progres titik** (baterai/hari/tahun)
-4. Atur setiap layer:
-   - Posisi dan ukuran (% atau dp), perataan
-   - Font (sans/serif/mono), ukuran font
-   - Warna: hanya Ink/Paper/Muted/transparan
-   - Aksi tap: buka aplikasi, Google Search, Google Lens, jam, atau kalender
-5. Widget tersimpan otomatis. Kembali ke daftar, ketuk **⋮ → Tambah ke layar utama**.
+Custom widgets are rendered directly by InkLauncher with Compose (they are not AppWidgets), so they stay lightweight and monochrome.
 
-**Token teks** (diganti otomatis; format tanggal mengikuti locale):
+**Create a widget:**
+
+1. Long-press an empty area → **Custom widgets** → **+**.
+2. Set the widget size in grid cells (for example 4×2). A live preview is shown at the top.
+3. Add layers:
+   - **Text**
+   - **Box**: rectangle, capsule or circle, filled or outline
+   - **Icon** (Material Symbols)
+   - **Dot-matrix clock** (5×7, 24/12 h)
+   - **Divider**
+   - **Dot progress** (battery, day or year)
+4. Configure each layer:
+   - Position and size (% or dp), alignment
+   - Font (sans/serif/mono), font size
+   - Color: Ink/Paper/Muted/transparent only
+   - Tap action: open app, Google Search, Google Lens, clock or calendar
+5. Changes are saved automatically. Back in the list, tap **⋮ → Add to home screen**.
+
+**Text tokens** (replaced automatically; date formats follow the system locale):
 
 `{time}` `{time12}` `{hour}` `{minute}` `{date}` `{day}` `{month}` `{year}` `{battery}` `{charging}` `{next_alarm}`
 
-Token waktu diperbarui setiap menit hanya saat launcher terlihat, lalu berhenti saat launcher tidak tampil agar hemat baterai.
+Time tokens refresh once a minute, only while the launcher is visible, and stop when it is not shown to save battery.
 
-**Preset bawaan:**
+**Built-in presets:**
 
-1. Jam dot-matrix + tanggal
-2. Bilah pencarian G + Lens
-3. Jam serif besar + baterai
+1. Dot clock + date
+2. Search G + Lens
+3. Serif clock + battery
 
-**Bagikan widget:**
+**Sharing:**
 
-- **Ekspor**: ⋮ → **Ekspor** menyimpan file `.inkw` (JSON).
-- **Impor**: ikon impor di kanan atas layar Widget kustom → pilih file `.inkw`.
+- **Export**: **⋮ → Export** saves an `.inkw` (JSON) file.
+- **Import**: use the import icon at the top right of the Custom widgets screen and pick an `.inkw` file.
 
-## Struktur proyek
+## Project structure
 
 ```
 app/src/main/java/com/taro/inklauncher/
 ├── MainActivity.kt, LauncherViewModel.kt, InkApp.kt
 ├── ui/   theme, home, drawer, glance, search, settings, widgeteditor, common
 ├── data/ AppRepository, IconProcessor, MaterialIconMap, Prefs, LayoutStore, GlanceProvider, Backup
-├── widget/ WidgetHostManager, custom/ (model JSON, renderer, token, font dot-matrix, preset)
-└── system/ LaunchHelper, StatusBarHelper
+├── widget/ WidgetHostManager, custom/ (JSON model, renderer, tokens, dot-matrix font, presets)
+└── system/ LaunchHelper, StatusBarHelper, LockAccessibilityService
 ```
 
-Build hanya lewat GitHub Actions (`.github/workflows/build.yml`). Jika `gradle-wrapper.jar` belum ada, workflow membuatnya terlebih dahulu dengan `gradle wrapper`.
+Builds run only on GitHub Actions (`.github/workflows/build.yml`). If `gradle-wrapper.jar` is missing, the workflow generates it with `gradle wrapper` first.
 
-## Lisensi & atribusi
+## License & attribution
 
-- **InkLauncher** © Taro, dirilis di bawah **GNU GPL v3.0** (lihat [LICENSE](LICENSE)).
-- **[Lawnchair Launcher](https://github.com/LawnchairLauncher/lawnchair)** (GPL-3.0): beberapa pendekatan diadaptasi dan ditulis ulang secara ringan dengan Compose, yaitu themed/monochrome icon, intent Google Search/voice/Lens, gestur buka notifikasi, dan alur widget host. File yang mengadaptasi kode Lawnchair diberi komentar sumber di bagian atasnya. Modul Launcher3/AOSP dan Quickstep tidak dipakai.
-- **[Material Symbols](https://github.com/google/material-design-icons)** oleh Google, Apache License 2.0 ([licenses/Apache-2.0-MaterialSymbols.txt](licenses/Apache-2.0-MaterialSymbols.txt)).
-- **Font** [Figtree](https://github.com/erikdkennedy/figtree) dan [Instrument Serif](https://github.com/Instrument/instrument-serif), SIL Open Font License 1.1 ([licenses/](licenses/)).
-- Data cuaca dari **[Open-Meteo](https://open-meteo.com/)** (CC BY 4.0).
+- **InkLauncher** © Taro, released under the **GNU GPL v3.0** (see [LICENSE](LICENSE)).
+- **[Lawnchair Launcher](https://github.com/LawnchairLauncher/lawnchair)** (GPL-3.0): some approaches are adapted and rewritten in a lightweight form with Compose:
+  - themed/monochrome icons
+  - Google Search/voice/Lens intents
+  - the notification gesture
+  - the widget host flow
+
+  Files that adapt Lawnchair code carry a source comment at the top. No Launcher3/AOSP or Quickstep modules are used.
+- **[Material Symbols](https://github.com/google/material-design-icons)** by Google, Apache License 2.0 ([licenses/Apache-2.0-MaterialSymbols.txt](licenses/Apache-2.0-MaterialSymbols.txt)).
+- **Fonts**: [Figtree](https://github.com/erikdkennedy/figtree) and [Instrument Serif](https://github.com/Instrument/instrument-serif), SIL Open Font License 1.1 ([licenses/](licenses/)).
+- Weather data from **[Open-Meteo](https://open-meteo.com/)** (CC BY 4.0).

@@ -207,7 +207,7 @@ fun BackupScreen(vm: LauncherViewModel) {
                 val ok = runCatching {
                     val text = withContext(Dispatchers.IO) {
                         context.contentResolver.openInputStream(uri)?.use { it.readBytes().toString(Charsets.UTF_8) }
-                    } ?: error("kosong")
+                    } ?: error("empty file")
                     vm.importBackup(text)
                 }.isSuccess
                 Toast.makeText(context, if (ok) okRestore else invalid, Toast.LENGTH_SHORT).show()
@@ -257,13 +257,13 @@ fun AboutScreen(vm: LauncherViewModel) {
             Paragraph(stringResource(R.string.about_attr_lawnchair))
             Paragraph(stringResource(R.string.about_attr_symbols))
             Paragraph(stringResource(R.string.about_attr_fonts))
-            SettingRow("GitHub", "https://github.com/Clarity69/ink-launcher", R.drawable.ic_ms_public, onClick = {
+            SettingRow(stringResource(R.string.about_link_github), "https://github.com/Clarity69/ink-launcher", R.drawable.ic_ms_public, onClick = {
                 LaunchHelper.url(context, "https://github.com/Clarity69/ink-launcher")
             })
-            SettingRow("Lawnchair", "https://github.com/LawnchairLauncher/lawnchair", R.drawable.ic_ms_public, onClick = {
+            SettingRow(stringResource(R.string.about_link_lawnchair), "https://github.com/LawnchairLauncher/lawnchair", R.drawable.ic_ms_public, onClick = {
                 LaunchHelper.url(context, "https://github.com/LawnchairLauncher/lawnchair")
             })
-            SettingRow("GPL-3.0", "https://www.gnu.org/licenses/gpl-3.0.html", R.drawable.ic_ms_menu_book, onClick = {
+            SettingRow(stringResource(R.string.about_link_license), "https://www.gnu.org/licenses/gpl-3.0.html", R.drawable.ic_ms_menu_book, onClick = {
                 LaunchHelper.url(context, "https://www.gnu.org/licenses/gpl-3.0.html")
             })
         }
