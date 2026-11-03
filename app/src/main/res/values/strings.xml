@@ -186,6 +186,7 @@
     <string name="icon_source_themed">Themed icon (Android 13+)</string>
     <string name="icon_source_material">Fallback: Material Symbols</string>
     <string name="icon_source_grayscale">Fallback: grayscale</string>
+    <string name="icon_source_letter">Fallback: huruf awal</string>
 
     <!-- Perbaiki gestur MIUI -->
     <string name="miui_fix_title">Perbaiki gestur MIUI</string>

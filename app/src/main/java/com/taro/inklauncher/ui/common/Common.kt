@@ -17,18 +17,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.taro.inklauncher.data.AppEntry
 import com.taro.inklauncher.data.IconProcessor
+import com.taro.inklauncher.data.IconResult
 import com.taro.inklauncher.data.IconShape
 import com.taro.inklauncher.data.LauncherPrefs
 import com.taro.inklauncher.ui.theme.LocalInk
@@ -61,29 +63,51 @@ fun AppIconImage(entry: AppEntry, size: Dp, modifier: Modifier = Modifier) {
     val processor = LocalIconProcessor.current ?: return
     val version by processor.version.collectAsState()
     val forceGray = entry.packageName in prefs.forceGrayscale
-    val bitmap: ImageBitmap? by produceState(
+    val result: IconResult? by produceState(
         initialValue = processor.cached(entry, prefs.fallbackStyle, forceGray),
         entry.key, prefs.fallbackStyle, forceGray, version,
     ) {
         value = processor.icon(entry, prefs.fallbackStyle, forceGray)
     }
+    // Ikon topeng diwarnai Ink/Paper; ikon grayscale dibalik di mode gelap agar tetap monokrom.
+    val maskFilter = remember(ink.fg) { ColorFilter.tint(ink.fg) }
+    val grayFilter = remember(ink.dark) { if (ink.dark) ColorFilter.colorMatrix(InvertMatrix) else null }
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
         when (prefs.iconShape) {
             IconShape.CIRCLE -> Box(Modifier.size(size).border(1.5.dp, ink.fg, CircleShape))
             IconShape.SQUIRCLE -> Box(Modifier.size(size).border(1.5.dp, ink.fg, RoundedCornerShape(30)))
             IconShape.NONE -> Unit
         }
-        val glyph = if (prefs.iconShape == IconShape.NONE) size * 1.3f else size * 0.95f
-        bitmap?.let {
+        val r = result
+        if (r == null) {
+            // Placeholder bulat tipis selama ikon dimuat.
+            Box(Modifier.size(size * 0.6f).border(1.dp, ink.muted, CircleShape))
+        } else {
+            val shaped = prefs.iconShape != IconShape.NONE
+            val glyph = when {
+                r.isMask && !shaped -> size * 1.3f
+                r.isMask -> size * 0.95f
+                !shaped -> size
+                else -> size * 0.72f
+            }
             Image(
-                bitmap = it,
+                bitmap = r.image,
                 contentDescription = entry.label,
                 modifier = Modifier.requiredSize(glyph),
-                colorFilter = ColorFilter.tint(ink.fg),
+                colorFilter = if (r.isMask) maskFilter else grayFilter,
             )
         }
     }
 }
+
+private val InvertMatrix = ColorMatrix(
+    floatArrayOf(
+        -1f, 0f, 0f, 0f, 255f,
+        0f, -1f, 0f, 0f, 255f,
+        0f, 0f, -1f, 0f, 255f,
+        0f, 0f, 0f, 1f, 0f,
+    ),
+)
 
 data class MenuAction(
     val label: String,

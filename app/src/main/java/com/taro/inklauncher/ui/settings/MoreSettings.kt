@@ -96,6 +96,7 @@ fun IconSettings(vm: LauncherViewModel) {
     val sThemed = stringResource(R.string.icon_source_themed)
     val sMaterial = stringResource(R.string.icon_source_material)
     val sGray = stringResource(R.string.icon_source_grayscale)
+    val sLetter = stringResource(R.string.icon_source_letter)
 
     InkScaffold(title = stringResource(R.string.settings_icons), onBack = vm::popScreen) {
         LazyColumn(Modifier.fillMaxSize()) {
@@ -139,6 +140,7 @@ fun IconSettings(vm: LauncherViewModel) {
                                 IconSource.THEMED -> sThemed
                                 IconSource.MATERIAL -> sMaterial
                                 IconSource.GRAYSCALE -> sGray
+                                IconSource.LETTER -> sLetter
                                 null -> "…"
                             },
                             color = ink.muted,
